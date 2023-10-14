@@ -7,7 +7,7 @@ variable "zip_name" {
 variable "runtime" {
   description = "The runtime environment for the lambdas"
   type        = string
-  default     = "nodejs8.10"
+  default     = "nodejs18.x"
 }
 
 variable "handler" {

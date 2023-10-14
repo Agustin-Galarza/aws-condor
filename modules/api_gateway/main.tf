@@ -40,7 +40,7 @@ module "api_gateway_endpoint" {
   http_method     = each.value.http_method
   authorizer_type = var.authorizer.type
   authorizer_id   = aws_api_gateway_authorizer.this.id
-  integration_uri = module.lambda.arn
+  integration_uri = module.lambda.invoke_arn
 }
 
 

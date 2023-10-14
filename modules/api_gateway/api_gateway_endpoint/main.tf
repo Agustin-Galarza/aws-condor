@@ -47,18 +47,18 @@ resource "aws_api_gateway_method_response" "this" {
 
 resource "aws_api_gateway_integration_response" "this" {
   rest_api_id = var.rest_api_id
-  resource_id = aws_api_gateway_method_response.this.id
+  resource_id = aws_api_gateway_resource.this.id
   http_method = aws_api_gateway_method.this.http_method
 
-  status_code = aws_api_gateway_method.this.http_method
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
+  status_code = aws_api_gateway_method_response.this.status_code
+#  response_parameters = {
+#    "method.response.header.Access-Control-Allow-Origin" = true
+#  }
+#
+#  response_templates = {
+#    "application/json" = ""
+#  }
 
-  response_templates = {
-    "application/json" = ""
-  }
-
-  depends_on = [aws_api_gateway_method_response.this, aws_api_gateway_method.this]
+  depends_on = [aws_api_gateway_method_response.this, aws_api_gateway_method.this, aws_api_gateway_integration.this]
 }
 
