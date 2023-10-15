@@ -32,3 +32,8 @@ output "sns" {
   value       = module.sns
   description = "SNS"
 }
+
+output "cognito_client_id" {
+  value       = module.cognito.user_pool_client_id
+  description = "Cognito Client ID"
+}

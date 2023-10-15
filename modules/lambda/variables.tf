@@ -1,9 +1,3 @@
-variable "zip_name" {
-  description = "The name of the zip file to updload"
-  type        = string
-  default     = "main.zip"
-}
-
 variable "runtime" {
   description = "The runtime environment for the lambdas"
   type        = string
@@ -13,7 +7,6 @@ variable "runtime" {
 variable "handler" {
   description = "The handler 'file.method' for the lambda"
   type        = string
-  default     = "main.handler"
 }
 
 variable "function_name" {
@@ -25,4 +18,17 @@ variable "function_name" {
 variable "apigw_arn" {
   description = "The arn of the related API Gateway"
   type        = string
+}
+
+variable "endpoint" {
+  description = "The information about the endpoint associated with this lambda. The method field should be all uppercase ('GET', 'POST') and the path MUST contain the starting '/'"
+  type = object({
+    path = string
+    method = string
+  })
+}
+
+variable "env_variables" {
+  description = "A map containing all the environment variables for the lambda"
+  type        = map(string)
 }

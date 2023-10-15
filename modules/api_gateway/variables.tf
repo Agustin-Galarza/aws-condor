@@ -19,8 +19,13 @@ variable "authorizer" {
 }
 
 variable "methods" {
-  description = "The methods of the API Gateway { path, http_method }[]"
-  type        = list(any)
+  description = "The methods of the API Gateway"
+  type = list(object({
+    path        = string
+    http_method = string
+    handler    = string
+    env_variables = map(any)
+  }))
 }
 
 variable "tags" {

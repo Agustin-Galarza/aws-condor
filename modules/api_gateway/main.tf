@@ -6,7 +6,17 @@ resource "aws_api_gateway_rest_api" "this" {
 module "lambda" {
   source = "../lambda"
 
+  for_each = { for method in var.methods : "${method.path}-${method.http_method}" => method }
+
   apigw_arn = aws_api_gateway_rest_api.this.execution_arn
+  endpoint = {
+    path        = each.value.path
+    method = each.value.http_method
+  }
+
+  handler = each.value.handler
+
+  env_variables = each.value.env_variables
 }
 
 // Stage
