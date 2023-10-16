@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "this" {
   bucket              = var.name
-  object_lock_enabled = true
 }
 
 data "aws_iam_policy_document" "this" {
@@ -20,14 +19,14 @@ resource "aws_s3_bucket_logging" "this" {
   target_bucket = aws_s3_bucket.this.id
   target_prefix = "condor-logs/"
 }
-
-resource "aws_s3_bucket_acl" "this" {
-  bucket = aws_s3_bucket.this.id
-  acl    = "log-delivery-write"
-}
-resource "aws_s3_bucket_policy" "www" {
-  bucket = aws_s3_bucket.this.id
-
-  policy = data.aws_iam_policy_document.this.json
-}
+#
+#resource "aws_s3_bucket_acl" "this" {
+#  bucket = aws_s3_bucket.this.id
+#  acl    = "log-delivery-write"
+#}
+#resource "aws_s3_bucket_policy" "www" {
+#  bucket = aws_s3_bucket.this.id
+#
+#  policy = data.aws_iam_policy_document.this.json
+#}
 

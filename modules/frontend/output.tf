@@ -7,7 +7,7 @@ output "www_endpoint" {
 }
 
 output "frontend_bucket" {
-  value = aws_s3_bucket.fontend.id
+  value = aws_s3_bucket.frontend.id
 }
 
 output "www_bucket" {
@@ -15,7 +15,7 @@ output "www_bucket" {
 }
 
 output "frontend_bucket_name" {
-  value = aws_s3_bucket.fontend.bucket
+  value = aws_s3_bucket.frontend.bucket
 }
 
 output "www_bucket_name" {
@@ -23,7 +23,7 @@ output "www_bucket_name" {
 }
 
 output "frontend_bucket_domain_name" {
-  value = aws_s3_bucket.fontend.bucket_domain_name
+  value = aws_s3_bucket.frontend.bucket_domain_name
 }
 
 output "www_bucket_domain_name" {
