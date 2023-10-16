@@ -8,6 +8,7 @@ module "lambda" {
 
   for_each = { for method in var.methods : "${method.path}-${method.http_method}" => method }
 
+  function_name = each.key
   apigw_arn = aws_api_gateway_rest_api.this.execution_arn
   endpoint = {
     path        = each.value.path
@@ -50,7 +51,7 @@ module "api_gateway_endpoint" {
   http_method     = each.value.http_method
   authorizer_type = var.authorizer.type
   authorizer_id   = aws_api_gateway_authorizer.this.id
-  integration_uri = module.lambda.invoke_arn
+  integration_uri = module.lambda[each.key].invoke_arn
 }
 
 
