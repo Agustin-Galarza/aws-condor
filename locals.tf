@@ -14,6 +14,12 @@ locals {
 
   security_groups_prefix = "${local.name}-security-group"
 
+  frontend_bucket_name = "dev.condor.com"
+  frontend_folder      = "./resources/frontend"
+
+  logging_bucket_name = "dev.condor-logs"
+
+
   tags = {
     // TODO: Put tags
     type = "vpc"
