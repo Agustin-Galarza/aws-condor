@@ -15,16 +15,44 @@ module "api_gateway" {
 
   methods = [
     {
-      path        = "reports"
-      http_method = "GET"
-      handler    = "main.handler"
-      env_variables = {}
+      path = "reports"
+      methods = [
+        {
+          name          = "get_all_reports"
+          http_method   = "GET",
+          handler       = "main.handler",
+          env_variables = {}
+        },
+        {
+          name          = "create_report"
+          http_method   = "POST",
+          handler       = "main.handler",
+          env_variables = {}
+        }
+      ]
     },
-    {
-      path        = "reports"
-      http_method = "POST"
-      handler    = "main.handler"
-      env_variables = {}
-    },
+    #    {
+    #      path = "{id}"
+    #      methods = [
+    #        {
+    #          name          = "get_id"
+    #          http_method   = "GET",
+    #          handler       = "main.handler",
+    #          env_variables = {}
+    #        },
+    #        {
+    #          name          = "update_id"
+    #          http_method   = "PUT",
+    #          handler       = "main.handler",
+    #          env_variables = {}
+    #        },
+    #        {
+    #          name          = "delete_id"
+    #          http_method   = "DELETE",
+    #          handler       = "main.handler",
+    #          env_variables = {}
+    #        }
+    #      ]
+    #    }
   ]
 }

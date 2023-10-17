@@ -6,9 +6,24 @@ resource "aws_api_gateway_rest_api" "this" {
 module "lambda" {
   source = "../lambda"
 
-  for_each = { for method in var.methods : "${method.path}-${method.http_method}" => method }
+  for_each = {
+    for entry in flatten([for val in var.methods : [for method in val.methods : {
+        path = val.path
+        name = method.name
+        http_method = method.http_method
+        handler = method.handler
+        env_variables = method.env_variables
+    }]]) : "${entry.path}-${entry.http_method}" => entry
+  }
+#  for_each = flatten([ for method in var.methods : {
+#    http_method = method.methods.http_method
+#    handler = method.methods.handler
+#    env_variables = method.methods.env_variables
+#    name = "${method.path}-${method.methods.http_method}"
+#    path = method.path
+#  } ])
 
-  function_name = each.key
+  function_name = each.value.name
   apigw_arn = aws_api_gateway_rest_api.this.execution_arn
   endpoint = {
     path        = each.value.path
@@ -42,16 +57,18 @@ resource "aws_api_gateway_authorizer" "this" {
 module "api_gateway_endpoint" {
 
   source   = "./api_gateway_endpoint"
-  for_each = { for method in var.methods : "${method.path}-${method.http_method}" => method }
+  for_each = { for method in var.methods : method.path => method }
 
   rest_api_id     = aws_api_gateway_rest_api.this.id
   stage_name      = var.stage
   parent_id       = aws_api_gateway_rest_api.this.root_resource_id
   path_part       = each.value.path
-  http_method     = each.value.http_method
+  methods = [for method in each.value.methods : {
+    http_method = method.http_method
+    integration_uri = module.lambda["${each.value.path}-${method.http_method}"].invoke_arn
+  }]
   authorizer_type = var.authorizer.type
   authorizer_id   = aws_api_gateway_authorizer.this.id
-  integration_uri = module.lambda[each.key].invoke_arn
 }
 
 

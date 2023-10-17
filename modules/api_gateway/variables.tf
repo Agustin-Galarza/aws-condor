@@ -22,10 +22,13 @@ variable "methods" {
   description = "The methods of the API Gateway"
   type = list(object({
     path        = string
-    http_method = string
-    handler    = string
-    env_variables = map(any)
-  }))
+    methods = list(object({
+        http_method = string
+        handler    = string
+        env_variables = map(any)
+        name = string
+        }))
+    }))
 }
 
 variable "tags" {
