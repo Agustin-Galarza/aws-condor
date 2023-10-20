@@ -13,7 +13,7 @@ module "rds_proxy" {
 module "rds_cluster" {
   source = "./modules/rds"
 
-  cluster_id     = "rds_cluster"
+  cluster_id     = "rds-cluster"
   instance_count = 3
 
   availability_zones = ["us-east-1a", "us-east-1b"]
