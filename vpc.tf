@@ -38,3 +38,15 @@ module "vpc_endpoints" {
     }
   }
 }
+
+module "security_group" {
+  source = "./modules/security_group"
+
+  for_each = local.security_groups
+
+  name          = "${each.key}_security_group"
+  vpc_id = module.vpc.vpc_id
+  description   = each.value.description
+  ingress_rules = each.value.ingress_rules
+  egress_rules  = each.value.egress_rules
+}

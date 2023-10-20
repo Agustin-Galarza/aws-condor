@@ -1,5 +1,5 @@
 resource "aws_rds_cluster_instance" "cluster_instances" {
-  count              = 2
+  count              = var.instance_count
   identifier         = "aurora-cluster-${count.index}"
   cluster_identifier = aws_rds_cluster.default.id
   instance_class     = "db.r4.large"
@@ -8,10 +8,11 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
 }
 
 resource "aws_rds_cluster" "default" {
-  cluster_identifier = "aurora-cluster-demo"
+  cluster_identifier = var.cluster_id
   engine             = "aurora-postgresql"
-  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  database_name      = "mydb"
-  master_username    = "foo"
-  master_password    = "barbut8chars"
+  availability_zones = var.availability_zones
+  database_name      = var.database_name
+  master_username    = var.master_credentials.username
+  master_password    = var.master_credentials.password
+  vpc_security_group_ids = var.security_group_ids
 }

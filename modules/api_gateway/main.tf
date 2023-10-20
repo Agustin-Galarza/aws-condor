@@ -23,6 +23,8 @@ module "lambda" {
 #    path = method.path
 #  } ])
 
+  role_arn = var.role_arn
+
   function_name = each.value.name
   apigw_arn = aws_api_gateway_rest_api.this.execution_arn
   endpoint = {

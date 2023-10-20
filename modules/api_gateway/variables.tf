@@ -36,3 +36,8 @@ variable "tags" {
   type        = map(any)
   default     = {}
 }
+
+variable "role_arn" {
+  description = "Role ARN to use for the lambda functions"
+  type = string
+}

@@ -11,7 +11,7 @@ resource "aws_lambda_function" "index" {
     variables = var.env_variables
   }
 
-  role = data.aws_iam_role.lambda.arn
+  role = var.role_arn
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {

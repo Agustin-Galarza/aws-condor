@@ -1,22 +1,31 @@
-resource "aws_security_group" "allow_tcp" {
-  name = "allow_tcp"
-  description = "Allow TCP inbound traffic"
-  vpc_id = vpc.vpc_id # TODO: is this ok?
+resource "aws_security_group" "this" {
+  name = var.name
+  description = var.description
+  vpc_id = var.vpc_id
+}
 
-  ingress {
-    description = "Allow TCP from VPC"
-    from_port = 0
-    to_port = 5432
-    protocol = "tcp"
-    cidr_blocks = [] # TODO: what goes in here?
-  }
+resource "aws_vpc_security_group_ingress_rule" "this" {
+  security_group_id = aws_security_group.this.id
 
-  # TODO: should we specify egress?
-  egress {
-    description = "Allow ALL egress traffic"
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  count = length(var.ingress_rules)
+
+  ip_protocol = var.ingress_rules[count.index].ip_protocol
+  description = var.ingress_rules[count.index].description
+  from_port = var.ingress_rules[count.index].from_port
+  to_port = var.ingress_rules[count.index].to_port
+  cidr_ipv4 = var.ingress_rules[count.index].ip_range
+  referenced_security_group_id = var.ingress_rules[count.index].self? aws_security_group.this.id : null
+}
+
+resource "aws_vpc_security_group_egress_rule" "this" {
+  security_group_id = aws_security_group.this.id
+
+  count = length(var.egress_rules)
+
+  ip_protocol = var.egress_rules[count.index].ip_protocol
+  description = var.egress_rules[count.index].description
+  from_port = var.egress_rules[count.index].from_port
+  to_port = var.egress_rules[count.index].to_port
+  cidr_ipv4 = var.egress_rules[count.index].ip_range
+  referenced_security_group_id = var.ingress_rules[count.index].self? aws_security_group.this.id : null
 }
