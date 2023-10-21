@@ -1,8 +1,8 @@
 resource "aws_lambda_function" "index" {
   function_name = var.function_name
 
-  filename         = "resources/lambda_sources/lambda.zip"
-  source_code_hash = filebase64sha256("resources/lambda_sources/lambda.zip")
+  filename         = local.filename
+  source_code_hash = filebase64sha256(local.filename)
 
   handler = var.handler
   runtime = var.runtime
@@ -11,7 +11,7 @@ resource "aws_lambda_function" "index" {
     variables = var.env_variables
   }
 
-  role = data.aws_iam_role.lambda.arn
+  role = var.role_arn
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {

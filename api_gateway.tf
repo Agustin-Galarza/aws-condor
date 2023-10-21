@@ -12,6 +12,7 @@ module "api_gateway" {
     name = "main"
     type = "COGNITO_USER_POOLS"
   }
+  role_arn = data.aws_iam_role.lab_role.arn
 
   methods = [
     {
@@ -21,12 +22,14 @@ module "api_gateway" {
           name          = "get_all_reports"
           http_method   = "GET",
           handler       = "main.handler",
+          zip_name      = "reports-get"
           env_variables = {}
         },
         {
           name          = "create_report"
           http_method   = "POST",
           handler       = "main.handler",
+          zip_name      = "reports-post"
           env_variables = {}
         }
       ]

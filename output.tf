@@ -13,7 +13,12 @@ output "vpc_cidr" {
   value       = module.vpc.vpc_cidr_block
 }
 
-output "private_subnets" {
+output "vpc_database_subnets" {
+  description = "The IDs of the VPC database subnets"
+  value       = module.vpc.database_subnets
+}
+
+output "application_subnets" {
   description = "The IDs of the private subnets"
   value       = module.vpc.private_subnets
 }
@@ -37,3 +42,12 @@ output "cognito_client_id" {
   value       = module.cognito.user_pool_client_id
   description = "Cognito Client ID"
 }
+
+output "lab_role_arn" {
+  value = data.aws_iam_role.lab_role.arn
+}
+
+output "application_security_group_id" {
+  value = module.application_security_group.id
+}
+

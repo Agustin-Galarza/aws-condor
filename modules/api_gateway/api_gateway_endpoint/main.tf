@@ -58,13 +58,6 @@ resource "aws_api_gateway_integration_response" "this" {
   http_method = each.value.http_method
 
   status_code = aws_api_gateway_method_response.this[each.key].status_code
-#  response_parameters = {
-#    "method.response.header.Access-Control-Allow-Origin" = true
-#  }
-#
-#  response_templates = {
-#    "application/json" = ""
-#  }
 
   depends_on = [aws_api_gateway_method_response.this, aws_api_gateway_method.this, aws_api_gateway_integration.this]
 }
