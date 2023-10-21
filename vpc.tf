@@ -9,8 +9,6 @@ module "vpc" {
   private_subnet_names  = local.private_subnets_names
   database_subnet_names = local.database_subnets_names
 
-  database_subnet_group_name = "database-subnet-group"
-
 
   enable_vpn_gateway  = false
   enable_nat_gateway  = false
@@ -27,9 +25,6 @@ module "vpc_endpoints" {
   create_security_group      = true
   security_group_name_prefix = local.security_groups_prefix
   security_group_description = "VPC security group"
-  security_group_rules = {
-    // TODO: define
-  }
 
 
   endpoints = {
@@ -38,21 +33,58 @@ module "vpc_endpoints" {
       subnet_id = module.vpc.private_subnets
     }
     dynamodb = {
-      # gateway endpoint
       service         = "dynamodb"
-      route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
+      service_type    = "Gateway"
+      route_table_ids = flatten([module.vpc.private_route_table_ids])
+      policy          = data.aws_iam_policy_document.dynamodb_endpoint_policy.json
     },
   }
+
 }
 
-module "security_group" {
+module "application_security_group" {
   source = "./modules/security_group"
 
-  for_each = local.security_groups
+  name = "application_security_group"
 
-  name          = "${each.key}_security_group"
-  vpc_id        = module.vpc.vpc_id
-  description   = each.value.description
-  ingress_rules = each.value.ingress_rules
-  egress_rules  = each.value.egress_rules
+  vpc_id = module.vpc.vpc_id
+  description = "Security group for the application layer"
+  ingress_rules = [
+    {
+      description = "Allow HTTPS traffic the lambdas",
+      from_port   = 443,
+      to_port     = 443,
+      ip_protocol = "tcp",
+      ip_range    = "0.0.0.0/0",
+    },
+  ]
+  egress_rules = [
+    {
+      description = "Allow traffic to the database",
+      to_port     = 5432,
+      ip_protocol = "tcp",
+      ip_range    = "10.0.20.0/23", # (10.0.20.0/24 and 10.0.21.0/24)
+    }
+  ]
+}
+
+module "database_security_group" {
+  source = "./modules/security_group"
+
+  name         = "database_security_group"
+  vpc_id = module.vpc.vpc_id
+
+  description  = "Security group for the dynamodb layer"
+  ingress_rules = []
+  egress_rules = [
+    {
+      description    = "Allow traffic from the application layer",
+      from_port      = 443,
+      to_port        = 443,
+      ip_protocol    = "tcp",
+      prefix_list_id = module.vpc_endpoints.endpoints["dynamodb"].prefix_list_id
+    }
+  ]
+
+  depends_on = [module.vpc_endpoints, module.vpc]
 }

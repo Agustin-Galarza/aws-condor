@@ -23,6 +23,7 @@ variable "ingress_rules" {
     to_port : optional(number, 0),
     ip_protocol : string,
     ip_range : optional(string, ""),
+    prefix_list_id: optional(string),
     self : optional(bool, false)
   }))
 }
@@ -35,6 +36,7 @@ variable "egress_rules" {
     to_port : optional(number, 0),
     ip_protocol : string,
     ip_range : optional(string, ""),
+    prefix_list_id: optional(string),
     self : optional(bool, false)
   }))
 }

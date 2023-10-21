@@ -14,6 +14,7 @@ resource "aws_vpc_security_group_ingress_rule" "this" {
   from_port                    = var.ingress_rules[count.index].ip_protocol != "-1" ? var.ingress_rules[count.index].from_port : null
   to_port                      = var.ingress_rules[count.index].ip_protocol != "-1" ? var.ingress_rules[count.index].to_port : null
   cidr_ipv4                    = var.ingress_rules[count.index].ip_range != "" ? var.ingress_rules[count.index].ip_range : null
+  prefix_list_id = var.ingress_rules[count.index].prefix_list_id
   referenced_security_group_id = var.ingress_rules[count.index].self ? aws_security_group.this.id : null
 }
 
@@ -27,5 +28,6 @@ resource "aws_vpc_security_group_egress_rule" "this" {
   from_port                    = var.egress_rules[count.index].from_port
   to_port                      = var.egress_rules[count.index].to_port
   cidr_ipv4                    = var.egress_rules[count.index].ip_range != "" ? var.egress_rules[count.index].ip_range : null
+  prefix_list_id = var.egress_rules[count.index].prefix_list_id
   referenced_security_group_id = var.egress_rules[count.index].self ? aws_security_group.this.id : null
 }

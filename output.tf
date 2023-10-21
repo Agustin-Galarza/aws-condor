@@ -48,6 +48,6 @@ output "lab_role_arn" {
 }
 
 output "application_security_group_id" {
-  value = module.security_group["application"].id
+  value = module.application_security_group.id
 }
 
