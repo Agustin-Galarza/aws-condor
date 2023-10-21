@@ -61,13 +61,3 @@
      host_name = aws_s3_bucket.frontend.bucket_domain_name
    }
  }
-
- resource "aws_s3_bucket_server_side_encryption_configuration" "www" {
-   bucket = aws_s3_bucket.www.id
-
-   rule {
-     apply_server_side_encryption_by_default {
-       sse_algorithm = "AES256"
-     }
-   }
- }

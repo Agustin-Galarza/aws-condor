@@ -5,10 +5,7 @@ module "vpc" {
 
   azs                   = local.azs
   private_subnets       = [for key, _ in local.azs : cidrsubnet(local.vpc_cidr, 8, key + 10)]
-  database_subnets      = [for key, _ in local.azs : cidrsubnet(local.vpc_cidr, 8, key + 20)]
   private_subnet_names  = local.private_subnets_names
-  database_subnet_names = local.database_subnets_names
-
 
   enable_vpn_gateway  = false
   enable_nat_gateway  = false
@@ -58,14 +55,7 @@ module "application_security_group" {
       ip_range    = "0.0.0.0/0",
     },
   ]
-  egress_rules = [
-    {
-      description = "Allow traffic to the database",
-      to_port     = 5432,
-      ip_protocol = "tcp",
-      ip_range    = "10.0.20.0/23", # (10.0.20.0/24 and 10.0.21.0/24)
-    }
-  ]
+  egress_rules = []
 }
 
 module "database_security_group" {
