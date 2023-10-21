@@ -4,7 +4,7 @@ The best neighborhood overwatch application.
 
 ## Arquitectura actualizada del con las consideraciones de la catedra
 
-<img src="architectura.png" alt="architectura aws" width="800"/>
+<img src="arquitectura.png" alt="architectura aws" width="800"/>
 
 ## Descripción de Módulos Utilizados
 
