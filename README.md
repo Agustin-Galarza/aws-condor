@@ -2,7 +2,7 @@
 
 The best neighborhood overwatch application. 
 
-## Arquitectura
+## Arquitectura actualizada del con las consideraciones de la catedra
 
 <img src="architectura.png" alt="architectura aws" width="800"/>
 
