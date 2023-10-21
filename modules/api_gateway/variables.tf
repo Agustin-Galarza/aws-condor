@@ -25,6 +25,7 @@ variable "methods" {
     methods = list(object({
         http_method = string
         handler    = string
+        zip_name   = string
         env_variables = map(any)
         name = string
         }))

@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "index" {
   function_name = var.function_name
 
-  filename         = "resources/lambda_sources/lambda.zip"
+  filename         = "resources/lambda_sources/${var.zip_name}.zip"
   source_code_hash = filebase64sha256("resources/lambda_sources/lambda.zip")
 
   handler = var.handler

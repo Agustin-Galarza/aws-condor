@@ -31,11 +31,15 @@ module "vpc_endpoints" {
 
 
   endpoints = {
-    // s3 = {} TODO: Investigar si necesitamos esto para subir fotos y videos desde una lambda al s3 o si hay otra forma de darle acceso temporal al usuario que quiere subir algo al s3 para que lo haga de una
     sns = {
       service   = "sns"
       subnet_id = module.vpc.private_subnets
     }
+    dynamodb = {
+      # gateway endpoint
+      service         = "dynamodb"
+      route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
+    },
   }
 }
 

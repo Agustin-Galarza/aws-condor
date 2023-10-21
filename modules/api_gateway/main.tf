@@ -12,20 +12,15 @@ module "lambda" {
         name = method.name
         http_method = method.http_method
         handler = method.handler
+        zip_name = method.zip_name
         env_variables = method.env_variables
     }]]) : "${entry.path}-${entry.http_method}" => entry
   }
-#  for_each = flatten([ for method in var.methods : {
-#    http_method = method.methods.http_method
-#    handler = method.methods.handler
-#    env_variables = method.methods.env_variables
-#    name = "${method.path}-${method.methods.http_method}"
-#    path = method.path
-#  } ])
 
   role_arn = var.role_arn
 
   function_name = each.value.name
+  zip_name = each.value.zip_name
   apigw_arn = aws_api_gateway_rest_api.this.execution_arn
   endpoint = {
     path        = each.value.path

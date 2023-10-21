@@ -22,12 +22,14 @@ module "api_gateway" {
           name          = "get_all_reports"
           http_method   = "GET",
           handler       = "main.handler",
+          zip_name = "reports-get"
           env_variables = {}
         },
         {
           name          = "create_report"
           http_method   = "POST",
           handler       = "main.handler",
+          zip_name = "reports-post"
           env_variables = {}
         }
       ]

@@ -37,3 +37,8 @@ variable "role_arn" {
   description = "Role ARN to use for the lambda function"
   type = string
 }
+
+variable "zip_name" {
+    description = "The name of the zip file to upload (without the .zip), located in the `resources/lambda_sources` directory"
+    type        = string
+}
