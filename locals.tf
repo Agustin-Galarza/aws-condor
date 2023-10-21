@@ -41,37 +41,6 @@ locals {
         }
       ]
     },
-    "database" : {
-      name        = "database_security_group"
-      description = "Security group for the database layer"
-      ingress_rules = [
-        {
-          description = "Allow TCP traffic from the lambdas",
-          from_port   = 5432,
-          to_port     = 5432,
-          ip_protocol = "tcp",
-          ip_range    = "10.0.10.0/23", # bit magic 😉 (10.0.10.0/24 and 10.0.11.0/24)
-        },
-        {
-          description = "Allow all internal ingress traffic",
-          from_port   = 0,
-          to_port     = 0,
-          ip_protocol = "-1",
-          # ip_range    = "0.0.0.0/0",
-          self = true
-        }
-      ]
-      egress_rules = [
-        {
-          description = "Allow all internal egress traffic",
-          from_port   = 0,
-          to_port     = 0,
-          ip_protocol = "-1",
-          # ip_range    = "0.0.0.0/0",
-          self = true
-        }
-      ]
-    }
   }
 
 

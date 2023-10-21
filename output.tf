@@ -51,6 +51,3 @@ output "application_security_group_id" {
   value = module.security_group["application"].id
 }
 
-output "database_security_group_id" {
-  value = module.security_group["database"].id
-}
