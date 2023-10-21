@@ -1,0 +1,76 @@
+const AWS = require('aws-sdk');
+AWS.config.update({region:'us-east-1'});
+const cognito = new AWS.CognitoIdentityServiceProvider();
+const fetch = require('node-fetch');
+
+const handler = async (event, context) => {
+	const { username, password } = event;
+	const clientId = '7ncoabibabnvae1r2hangba63k';
+	const response = await cognito
+		.initiateAuth({
+			AuthFlow: 'USER_PASSWORD_AUTH',
+			AuthParameters: {
+				USERNAME: username,
+				PASSWORD: password,
+			},
+			ClientId: clientId,
+		})
+		.promise();
+	console.log(response)
+
+	if(response['ChallengeName'] === 'NEW_PASSWORD_REQUIRED'){
+		let params = {
+			ChallengeName: 'NEW_PASSWORD_REQUIRED',
+			ClientId: clientId,
+			ChallengeResponses: {
+				USERNAME: username,
+				NEW_PASSWORD: 'Galar@321',
+				"userAttributes.name": "galar"
+			},
+			Session: response['Session']
+		};
+
+		cognito.respondToAuthChallenge(params, function(err, data) {
+			if (err) console.log(err, err.stack); // an error occurred
+			else     console.log(data);           // successful response
+		});
+	} else {
+		const apiUrl = 'https://f3kd5eelr3.execute-api.us-east-1.amazonaws.com/dev/reports';
+		const idToken = response['AuthenticationResult']['IdToken'];
+		console.log("Id token: ", idToken);
+		const res = await fetch(apiUrl, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': idToken
+			}
+		});
+		const data = await res.json()
+		console.log(data)
+	}
+	return {
+		statusCode: 200,
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+		},
+		body: JSON.stringify(response),
+	};
+};
+
+handler({"username": "galar", "password": "Galar@321"});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

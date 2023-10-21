@@ -3,9 +3,9 @@ module "vpc" {
 
   name = local.name
 
-  azs                   = local.azs
-  private_subnets       = [for key, _ in local.azs : cidrsubnet(local.vpc_cidr, 8, key + 10)]
-  private_subnet_names  = local.private_subnets_names
+  azs                  = local.azs
+  private_subnets      = [for key, _ in local.azs : cidrsubnet(local.vpc_cidr, 8, key + 10)]
+  private_subnet_names = local.private_subnets_names
 
   enable_vpn_gateway  = false
   enable_nat_gateway  = false
@@ -44,7 +44,7 @@ module "application_security_group" {
 
   name = "application_security_group"
 
-  vpc_id = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
   description = "Security group for the application layer"
   ingress_rules = [
     {
@@ -61,10 +61,10 @@ module "application_security_group" {
 module "database_security_group" {
   source = "./modules/security_group"
 
-  name         = "database_security_group"
+  name   = "database_security_group"
   vpc_id = module.vpc.vpc_id
 
-  description  = "Security group for the dynamodb layer"
+  description   = "Security group for the dynamodb layer"
   ingress_rules = []
   egress_rules = [
     {

@@ -10,9 +10,9 @@ data "aws_region" "current" {
   provider = aws.aws
 }
 
-data "aws_iam_policy_document" "dynamodb_endpoint_policy"{
+data "aws_iam_policy_document" "dynamodb_endpoint_policy" {
   statement {
-    effect  = "Allow"
+    effect = "Allow"
     actions = [
       "dynamodb:PutItem",
       "dynamodb:Scan",
