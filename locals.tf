@@ -57,8 +57,8 @@ locals {
           from_port   = 0,
           to_port     = 0,
           ip_protocol = "-1",
-          ip_range    = "0.0.0.0/0",
-          self        = true
+          # ip_range    = "0.0.0.0/0",
+          self = true
         }
       ]
       egress_rules = [
@@ -67,8 +67,8 @@ locals {
           from_port   = 0,
           to_port     = 0,
           ip_protocol = "-1",
-          ip_range    = "0.0.0.0/0",
-          self        = true
+          # ip_range    = "0.0.0.0/0",
+          self = true
         }
       ]
     }

@@ -2,8 +2,8 @@ variable "name" {
   type = string
 }
 
-variable "security_group_id" {
-  type = string
+variable "security_group_ids" {
+  type = list(string)
 }
 
 variable "subnet_ids" {
@@ -11,6 +11,5 @@ variable "subnet_ids" {
 }
 
 variable "role_arn" {
-    type = string
+  type = string
 }
-

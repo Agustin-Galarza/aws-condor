@@ -5,10 +5,13 @@ resource "aws_db_proxy" "proxy" {
   idle_client_timeout    = 1800
   require_tls            = true
   role_arn               = var.role_arn
-  vpc_security_group_ids = [var.security_group_id]
+  vpc_security_group_ids = var.security_group_ids
   vpc_subnet_ids         = var.subnet_ids
 
-  auth {}
+  auth {
+    description = "RDS Proxy cluster auth"
+    iam_auth    = "DISABLED"
+  }
 
   tags = {}
 }

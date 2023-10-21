@@ -1,41 +1,41 @@
 
 variable "name" {
-  type = string
+  type        = string
   description = "The security group's name"
 }
 
 variable "description" {
-  type = string
+  type        = string
   description = "A description for the security group"
-  default = ""
+  default     = ""
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "The ID of the VPC"
 }
 
 variable "ingress_rules" {
   description = "A list of ingress rules to apply to the security group"
   type = list(object({
-    description: optional(string),
-    from_port: optional(number, 0),
-    to_port: optional(number, 0),
-    ip_protocol: string,
-    ip_range: string,
-    self: optional(bool, false)
+    description : optional(string),
+    from_port : optional(number, 0),
+    to_port : optional(number, 0),
+    ip_protocol : string,
+    ip_range : optional(string, ""),
+    self : optional(bool, false)
   }))
 }
 
 variable "egress_rules" {
   description = "A list of egress rules to apply to the security group"
   type = list(object({
-    description: optional(string),
-    from_port: optional(number, 0),
-    to_port: optional(number, 0),
-    ip_protocol: string,
-    ip_range: string,
-    self: optional(bool, false)
+    description : optional(string),
+    from_port : optional(number, 0),
+    to_port : optional(number, 0),
+    ip_protocol : string,
+    ip_range : optional(string, ""),
+    self : optional(bool, false)
   }))
 }
 

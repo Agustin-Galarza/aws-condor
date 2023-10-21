@@ -13,6 +13,11 @@ output "vpc_cidr" {
   value       = module.vpc.vpc_cidr_block
 }
 
+output "vpc_database_subnets" {
+  description = "The IDs of the VPC database subnets"
+  value       = module.vpc.database_subnets
+}
+
 output "application_subnets" {
   description = "The IDs of the private subnets"
   value       = module.vpc.private_subnets

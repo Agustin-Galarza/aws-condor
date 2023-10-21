@@ -3,7 +3,7 @@ module "rds_proxy" {
 
   name = "rds-proxy"
 
-  security_group_id = module.security_group["database"].id
+  security_group_ids = [module.security_group["database"].id]
 
   subnet_ids = module.vpc.database_subnets
 
@@ -16,7 +16,7 @@ module "rds_cluster" {
   cluster_id     = "rds-cluster"
   instance_count = 3
 
-  availability_zones = ["us-east-1a", "us-east-1b"]
+  availability_zones = local.azs
 
   database_name = "main"
 
