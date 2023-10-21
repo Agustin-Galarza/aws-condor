@@ -8,6 +8,8 @@ module "rds_proxy" {
   subnet_ids = module.vpc.database_subnets
 
   role_arn = data.aws_iam_role.lab_role.arn
+
+  depends_on = [module.vpc, module.security_group["database"]]
 }
 
 module "rds_cluster" {
@@ -21,10 +23,13 @@ module "rds_cluster" {
   database_name     = "main"
   subnet_group_name = module.vpc.database_subnet_group_name
 
+
   master_credentials = {
     username = "postgres",
     password = "postgres"
   }
 
   security_group_ids = [module.security_group["database"].id]
+
+  depends_on = [module.vpc, module.security_group["database"]]
 }
