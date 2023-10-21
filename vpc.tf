@@ -9,6 +9,8 @@ module "vpc" {
   private_subnet_names  = local.private_subnets_names
   database_subnet_names = local.database_subnets_names
 
+  database_subnet_group_name = "database-subnet-group"
+
 
   enable_vpn_gateway  = false
   enable_nat_gateway  = false
