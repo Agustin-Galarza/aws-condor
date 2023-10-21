@@ -11,6 +11,7 @@ resource "aws_rds_cluster" "default" {
   cluster_identifier     = var.cluster_id
   engine                 = "aurora-postgresql"
   availability_zones     = var.availability_zones
+  db_subnet_group_name   = var.subnet_group_name
   database_name          = var.database_name
   master_username        = var.master_credentials.username
   master_password        = var.master_credentials.password

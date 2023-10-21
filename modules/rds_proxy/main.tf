@@ -11,7 +11,12 @@ resource "aws_db_proxy" "proxy" {
   auth {
     description = "RDS Proxy cluster auth"
     iam_auth    = "DISABLED"
+    secret_arn  = aws_secretsmanager_secret.this.arn
   }
 
   tags = {}
+}
+
+resource "aws_secretsmanager_secret" "this" {
+  name = "rds-proxy-secret"
 }

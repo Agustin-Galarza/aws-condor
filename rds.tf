@@ -18,7 +18,8 @@ module "rds_cluster" {
 
   availability_zones = local.azs
 
-  database_name = "main"
+  database_name     = "main"
+  subnet_group_name = module.vpc.database_subnet_group_name
 
   master_credentials = {
     username = "postgres",
