@@ -23,9 +23,9 @@
  }
 
  output "frontend_bucket_domain_name" {
-   value = aws_s3_bucket.frontend.bucket_domain_name
+   value = aws_s3_bucket.frontend.bucket_regional_domain_name
  }
 
  output "www_bucket_domain_name" {
-   value = aws_s3_bucket.www.bucket_domain_name
+   value = aws_s3_bucket.www.bucket_regional_domain_name
  }

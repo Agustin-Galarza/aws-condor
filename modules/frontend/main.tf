@@ -10,10 +10,10 @@ resource "aws_s3_bucket" "frontend" {
   }
 }
 
-resource "aws_s3_bucket_logging" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_logging" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
 
-  target_bucket = aws_s3_bucket.log_bucket.id
+  target_bucket = aws_s3_bucket.frontend.id
   target_prefix = "log/"
 }
 
@@ -101,7 +101,7 @@ resource "aws_s3_bucket_acl" "www" {
 resource "aws_s3_bucket_logging" "www" {
   bucket = aws_s3_bucket.www.id
 
-  target_bucket = aws_s3_bucket.log_bucket.id
+  target_bucket = aws_s3_bucket.www.id
   target_prefix = "log/"
 }
 
