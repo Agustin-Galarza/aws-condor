@@ -8,4 +8,7 @@ module "cloudfront" {
   api_gw_id    = module.api_gateway.api_gateway_id
   api_gw_stage = module.api_gateway.api_gateway_stage
   region       = data.aws_region.current.name
+
+  s3_bucket_origin_id = module.frontend.www_bucket_rdn
+  s3_bucket_arn       = module.frontend.www_bucket_arn
 }

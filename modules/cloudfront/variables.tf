@@ -32,3 +32,14 @@ variable "api_gw_stage" {
   description = "Stage"
   type        = string
 }
+
+variable "s3_bucket_origin_id" {
+  description = "Origin ID of the S3 bucket"
+  type        = string
+}
+
+variable "s3_bucket_arn" {
+  description = "ARN of the S3 bucket"
+  type        = string
+}
+

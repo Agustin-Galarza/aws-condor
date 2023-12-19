@@ -58,3 +58,8 @@ resource "aws_cloudfront_distribution" "this" {
     Name = "main"
   }
 }
+
+resource "aws_s3_bucket_policy" "OAI_policy" {
+  bucket = var.s3_bucket_origin_id
+  policy = data.aws_iam_policy_document.frontend_OAI_policy.json
+}
