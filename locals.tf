@@ -17,8 +17,6 @@ locals {
   frontend_bucket_name = "galar.dev.condor.com"
   frontend_folder      = "./resources/frontend"
 
-  logging_bucket_name = "galar.dev.condor-logs"
-
 
   tags = {
     type = "vpc"
