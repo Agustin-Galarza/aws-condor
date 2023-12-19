@@ -12,7 +12,8 @@ module "api_gateway" {
     name = "main"
     type = "COGNITO_USER_POOLS"
   }
-  role_arn = data.aws_iam_role.lab_role.arn
+  role_arn   = data.aws_iam_role.lab_role.arn
+  account_id = data.aws_caller_identity.current.account_id
 
   methods = [
     {

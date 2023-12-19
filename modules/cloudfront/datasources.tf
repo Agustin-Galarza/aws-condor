@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "frontend_OAI_policy" {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.cloudfront_OAI.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.oai.iam_arn]
     }
     resources = [var.s3_bucket_arn, "${var.s3_bucket_arn}/*"]
   }
