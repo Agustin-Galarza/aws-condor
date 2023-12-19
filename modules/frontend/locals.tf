@@ -20,4 +20,6 @@ locals {
       }
     ]
   ])
+
+  logs_bucket_name = "${var.frontend_name}-logs"
 }

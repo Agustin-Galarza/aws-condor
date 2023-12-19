@@ -1,3 +1,18 @@
+// Logs
+module "logs" {
+  source        = "terraform-aws-modules/s3-bucket/aws"
+  bucket_prefix = local.logs_bucket_name
+  acl           = "log-delivery-write"
+
+  force_destroy = true
+
+  attach_deny_insecure_transport_policy = true
+  attach_require_latest_tls_policy      = true
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
+}
+
 // condor.com bucket
 resource "aws_s3_bucket" "frontend" {
   bucket = var.frontend_name
@@ -10,10 +25,10 @@ resource "aws_s3_bucket" "frontend" {
   }
 }
 
-resource "aws_s3_bucket_logging" "frontend" {
+resource "aws_s3_bucket_logging" "this" {
   bucket = aws_s3_bucket.frontend.id
 
-  target_bucket = aws_s3_bucket.frontend.id
+  target_bucket = module.logs.s3_bucket_id
   target_prefix = "log/"
 }
 
@@ -101,7 +116,7 @@ resource "aws_s3_bucket_acl" "www" {
 resource "aws_s3_bucket_logging" "www" {
   bucket = aws_s3_bucket.www.id
 
-  target_bucket = aws_s3_bucket.www.id
+  target_bucket = module.logs.s3_bucket_id
   target_prefix = "log/"
 }
 

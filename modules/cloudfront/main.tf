@@ -29,7 +29,7 @@ resource "aws_cloudfront_distribution" "this" {
     origin_id   = var.s3_bucket_id
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai.iam_arn
     }
   }
 
@@ -62,4 +62,9 @@ resource "aws_cloudfront_distribution" "this" {
   tags = {
     Name = "main"
   }
+}
+
+resource "aws_s3_bucket_policy" "OAI_policy" {
+  bucket = var.s3_bucket_origin_id
+  policy = data.aws_iam_policy_document.frontend_OAI_policy.json
 }
