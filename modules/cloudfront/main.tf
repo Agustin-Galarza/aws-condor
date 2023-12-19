@@ -2,6 +2,11 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = "OAI for our domain"
 }
 
+resource "aws_s3_bucket_policy" "OAI_policy" {
+  bucket = var.s3_bucket_id
+  policy = data.aws_iam_policy_document.frontend_OAI_policy.json
+}
+
 data "aws_cloudfront_cache_policy" "optimized" {
   name = "Managed-CachingOptimized"
 }

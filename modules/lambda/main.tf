@@ -20,5 +20,5 @@ resource "aws_lambda_permission" "apigw_lambda" {
   function_name = var.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${var.apigw_arn}/*/${var.endpoint.method}${var.endpoint.path}"
+  source_arn = "${var.apigw_arn}/*/${var.endpoint.method}/${var.endpoint.path}"
 }
