@@ -35,7 +35,13 @@ module "vpc_endpoints" {
       route_table_ids = flatten([module.vpc.private_route_table_ids])
       policy          = data.aws_iam_policy_document.dynamodb_endpoint_policy.json
     },
+    # s3 = {
+    #   # interface endpoint
+    #   service = "s3"
+    #   tags    = { Name = "s3-vpc-endpoint" }
+    # },
   }
+  depends_on = []
 
 }
 

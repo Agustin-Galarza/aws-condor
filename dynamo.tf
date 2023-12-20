@@ -8,12 +8,12 @@ module "dynamo" {
   }
 
   hash_key = {
-    name = "report-id"
+    name = "PartitionKey"
     type = "S"
   }
 
   range_key = {
-    name = "neighbourhood#date"
+    name = "SortKey"
     type = "S"
   }
 }

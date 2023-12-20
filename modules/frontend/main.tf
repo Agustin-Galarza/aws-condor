@@ -13,6 +13,64 @@ module "logs" {
   object_ownership         = "ObjectWriter"
 }
 
+// Imágenes
+resource "aws_s3_bucket" "reports" {
+  bucket = "reportes.dev.condor.com"
+  #  object_lock_enabled = true
+  force_destroy = true
+
+
+  tags = {
+    type = "reports"
+  }
+}
+
+# resource "aws_s3_bucket_logging" "reports" {
+#   bucket = aws_s3_bucket.reports.id
+
+#   target_bucket = module.logs.s3_bucket_id
+#   target_prefix = "log/"
+# }
+
+resource "aws_s3_bucket_public_access_block" "reports" {
+  bucket = aws_s3_bucket.reports.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "reports" {
+  bucket = aws_s3_bucket.reports.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "reports" {
+  depends_on = [aws_s3_bucket_ownership_controls.reports]
+
+  bucket = aws_s3_bucket.reports.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "reports" {
+  bucket = aws_s3_bucket.reports.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+
+# resource "aws_s3_bucket_policy" "OAI_policy" {
+#   bucket = var.s3_bucket_id
+#   policy = data.aws_iam_policy_document.frontend_OAI_policy.json
+# }
+
 // condor.com bucket
 resource "aws_s3_bucket" "frontend" {
   bucket = var.frontend_name

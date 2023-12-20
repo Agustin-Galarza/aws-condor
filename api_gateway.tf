@@ -20,43 +20,78 @@ module "api_gateway" {
       path = "reports"
       methods = [
         {
-          name          = "get_all_reports"
+          name          = "reports_get"
           http_method   = "GET",
           handler       = "main.handler",
-          zip_name      = "reports-get"
+          zip_name      = "reports_get"
           env_variables = {}
         },
         {
-          name          = "create_report"
+          name          = "reports_post"
           http_method   = "POST",
           handler       = "main.handler",
-          zip_name      = "reports-post"
+          zip_name      = "reports_post"
           env_variables = {}
         }
       ]
     },
-    #    {
-    #      path = "{id}"
-    #      methods = [
-    #        {
-    #          name          = "get_id"
-    #          http_method   = "GET",
-    #          handler       = "main.handler",
-    #          env_variables = {}
-    #        },
-    #        {
-    #          name          = "update_id"
-    #          http_method   = "PUT",
-    #          handler       = "main.handler",
-    #          env_variables = {}
-    #        },
-    #        {
-    #          name          = "delete_id"
-    #          http_method   = "DELETE",
-    #          handler       = "main.handler",
-    #          env_variables = {}
-    #        }
-    #      ]
-    #    }
+    {
+      path = "groups"
+      methods = [
+        {
+          name          = "groups_get"
+          http_method   = "GET",
+          handler       = "main.handler",
+          zip_name      = "groups_get"
+          env_variables = {}
+        },
+        {
+          name          = "groups_post"
+          http_method   = "POST",
+          handler       = "main.handler",
+          zip_name      = "groups_post"
+          env_variables = {}
+        }
+      ]
+    },
+    {
+      path = "users"
+      methods = [
+        {
+          name          = "users_get"
+          http_method   = "GET",
+          handler       = "main.handler",
+          zip_name      = "users_get"
+          env_variables = {}
+        },
+        {
+          name          = "users_post"
+          http_method   = "POST",
+          handler       = "main.handler",
+          zip_name      = "users_post"
+          env_variables = {}
+        }
+      ]
+    },
+    {
+      path = "images"
+      methods = [
+        {
+          name          = "images_get"
+          http_method   = "GET",
+          handler       = "main.handler",
+          zip_name      = "images_get"
+          env_variables = {}
+        },
+        {
+          name          = "images_post"
+          http_method   = "POST",
+          handler       = "main.handler",
+          zip_name      = "images_post"
+          env_variables = {}
+        }
+      ]
+    },
+
   ]
 }

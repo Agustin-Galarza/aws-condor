@@ -1,0 +1,26 @@
+Alumnos, les hago entrega de mis correcciones de. su trabajo:
+
+No usan cache no condicional en los assets estáticos. Esto es requerido por enunciado
+Los svgs no usan file busting. Si cumpliesen con el uso de cace no condicional, esto implicaría una imposibilidad de actualizarlos.
+Al registrarse se envía un mail con las imágenes rotas.
+Las imágenes de db usan cache no condicional. Sin embargo, como es posible editarlas, esto implica que las mismas no actualizan. Se debiera adoptar un esquema de urls donde cambie la misma al cambiar el contenido o en su defecto adoptar cache condicional. Esto es un error conceptual grave
+El frontend invalida el contenido y vuelve a cargar cuando pierde el foco.
+No implementan refresh tokens.
+Mientras se reproduce un audio se disparan requests POST /shows/{id}/episodes/{ep}/listens?finished=false en forma constante, ultiples veces por segundo. Esto es un error grave
+Las recomendaciones para un show incluyen al propio show.
+La UI habla de “Episodios populares” pero lo que recomiendan son shows.
+El submit de editar perfil dice “Confirmae”
+Los tests siguen sin ser verdaderamente unitarios, usando métodos de la class under test para el setup. Esto es un error conceptual grave que ya había sido corregido en entregas anteriores
+El sistema sigue recuperando colecciones grandes completas a memoria sólo para validar la existencia de un elemento en lugar de resolverlo en base. Esto ya había sido corregido en entregas anteriores
+Hay un único test de frontend. Esto es requerido por enunciado
+No usan interceptors de Axios, por lo que tienen mucha lógica repetida en cada invocación a la API.
+Hay archivos bash mezclados dentro del código frontend, que no tienen relación con la SPA.
+La aplicación tiene mucha complejidad innecesaria. CustomJsonParser, los MessageBodyWriter, ReloadPrivilegesInterceptor y CharacterEncodingFilter son sólo algunas de las clases que no debieran ser necesarias con todo lo que Spring y Jersey ya ofrecen.
+La API no es REST / no implementa HATEOAS correctamente. Estos son errores conceptuales graves. A continuación una lista no exhaustiva de errores encontrados:
+Paginan mal, la metadata viene en el body y no via headers Link. Es imposible recorrer la API sin conocerla previamente.
+Tienen endpoints como /api/login, que no representan recursos del sistema y hasta denotan verbos.
+El POST a /shows/{id}/follows devuelve un 200 sin location, y el DELETE se hace al mismo path, lo que denota ser dependiente a quien haga la solicitud y por tanto no una URN.
+El endpoint /shows/{id}/episodes/{ep}/listens?finished=false es llamativo. ¿Por qué es un POST? ¿Por qué no recibe un body y sólo un query param?
+Los shows viven debajo de múltiples paths (de nuevo, no son URNs), por ejemplo se tiene /users/{id}/followed-shows, /users/{id}/liked-shows y /shows
+PUT a users para updates parciales, cuando la semántica de este verbo es la de reemplazar entidades.
+Su nota de final es por tanto un 2
