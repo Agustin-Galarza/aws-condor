@@ -43,6 +43,12 @@ resource "aws_cognito_user_pool" "this" {
       max_length = local.user_schema.string_attribute_constraints.max_length
     }
   }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo "VITE_COGNITO_CLIENT_ID=${aws_cognito_user_pool.this.id}" >> ./frontend/condor/.env
+    EOT
+  }
 }
 
 resource "aws_cognito_user_pool_client" "this" {
@@ -50,4 +56,13 @@ resource "aws_cognito_user_pool_client" "this" {
   explicit_auth_flows = local.client_explicit_auth_flows
 
   user_pool_id = aws_cognito_user_pool.this.id
+
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo "VITE_COGNITO_USER_POOL_ID=${aws_cognito_user_pool.this.idaws_cognito_user_pool_client.this.id}" >> ./frontend/condor/.env
+    EOT
+  }
 }
+
+
