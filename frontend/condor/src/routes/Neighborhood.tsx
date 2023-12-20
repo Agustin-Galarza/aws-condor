@@ -34,7 +34,7 @@ function Neighborhood() {
         <div className="flex items-center gap-2">
           <select
             onChange={handleOnChange}
-            className="py-3 px-4 pe-9 block w-full border-[1px] text-zinc-300  bg-zinc-800 border-zinc-500 rounded-lg text-sm focus:border-zinc-300 focus:ring-zinc-500 disabled:opacity-50 disabled:pointer-events-none "
+            className=" h-12 py-3 px-4 pe-9 block w-full border-[1px] text-zinc-300  bg-zinc-800 border-zinc-500 rounded-lg text-sm focus:border-zinc-300 focus:ring-zinc-500 disabled:opacity-50 disabled:pointer-events-none "
           >
             {neighborhoodList.map((neighborhood) => (
               <option key={neighborhood} value={neighborhood}>
@@ -44,7 +44,7 @@ function Neighborhood() {
           </select>
           <button
             onClick={handleOnClick}
-            className="px-3 py-2 bg-red-500 font-extrabold rounded h-full"
+            className="px-3 py-2 bg-red-500 font-extrabold rounded h-12"
           >
             go
           </button>

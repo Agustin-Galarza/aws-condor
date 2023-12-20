@@ -17,9 +17,17 @@ function getToken(): string | null {
   return null;
 }
 
+function getNeighborhood(): string | null {
+  const neighborhood = localStorage.getItem("neighborhood");
+  if (neighborhood) {
+    return neighborhood;
+  }
+  return null;
+}
+
 const userStore = create<userState>()((set) => ({
   token: getToken(),
-  neighborhood: null,
+  neighborhood: getNeighborhood(),
   setToken: (token: string) => {
     localStorage.setItem("token", token);
     set({ token: token });
