@@ -8,6 +8,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const onSubmit = (e: { preventDefault: () => void }) => {
@@ -26,12 +28,15 @@ const Login = () => {
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         console.log("onSuccess: ", data);
+        navigate("/");
       },
       onFailure: (err) => {
         console.error("onFailure: ", err);
+        setError(err.message);
       },
       newPasswordRequired: (data) => {
         console.log("newPasswordRequired: ", data);
+        setError("Please reset your password.");
       },
     });
   };
@@ -69,6 +74,7 @@ const Login = () => {
           </button>
         </div>
       </Form>
+      {error && <p className="text-red-500">{error}</p>}
     </section>
   );
 };

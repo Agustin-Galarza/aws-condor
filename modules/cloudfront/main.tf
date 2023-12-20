@@ -63,6 +63,12 @@ resource "aws_cloudfront_distribution" "this" {
   tags = {
     Name = "main"
   }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo "VITE_API_URL=${aws_cloudfront_distribution.this.domain_name}" >> ./frontend/condor/.env
+    EOT
+  }
 }
 
 resource "aws_s3_bucket_policy" "OAI_policy" {

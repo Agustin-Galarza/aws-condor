@@ -7,6 +7,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,8 +17,10 @@ const Signup = () => {
     UserPool.signUp(email, password, [], null, (err, data) => {
       if (err) {
         console.log(err);
+        setError(err.message);
       }
       console.log(data);
+      navigate("/");
     });
   };
 
@@ -53,6 +57,7 @@ const Signup = () => {
           </button>
         </div>
       </Form>
+      {error && <p className="text-red-500">{error}</p>}
     </section>
   );
 };
