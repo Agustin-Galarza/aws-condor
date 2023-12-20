@@ -1,68 +1,63 @@
-resource "aws_cognito_user_pool" "this" {
-  name = local.name
+resource "aws_cognito_user_pool" "userpool" {
+  name = "condor-userpool"
 
-  email_verification_subject = "Your Verification Code"
-  email_verification_message = "Please use the following code: {####}"
-  alias_attributes           = local.alias_attributes
-  auto_verified_attributes   = local.auto_verified_attributes
+  schema {
+    name                     = "Email"
+    attribute_data_type      = "String"
+    mutable                  = true
+    developer_only_attribute = false
+  }
+
+  email_configuration {
+    email_sending_account = "COGNITO_DEFAULT"
+  }
+
+  auto_verified_attributes = ["email"]
 
   password_policy {
-    minimum_length    = local.password.minimum_length
-    require_lowercase = local.password.require_lowercase
-    require_numbers   = local.password.require_numbers
-    require_symbols   = local.password.require_symbols
-    require_uppercase = local.password.require_uppercase
+    minimum_length    = 6
+    require_lowercase = false
+    require_numbers   = false
+    require_symbols   = false
+    require_uppercase = false
   }
 
+  username_attributes = ["email"]
   username_configuration {
-    case_sensitive = local.username_configuration.case_sensitive
+    case_sensitive = true
   }
 
-  schema {
-    attribute_data_type      = local.email_schema.attribute_data_type
-    developer_only_attribute = local.email_schema.developer_only_attribute
-    mutable                  = local.email_schema.mutable
-    name                     = local.email_schema.name
-    required                 = local.email_schema.required
-
-    string_attribute_constraints {
-      min_length = local.email_schema.string_attribute_constraints.min_length
-      max_length = local.email_schema.string_attribute_constraints.max_length
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
     }
-  }
-
-  schema {
-    attribute_data_type      = local.user_schema.attribute_data_type
-    developer_only_attribute = local.user_schema.developer_only_attribute
-    mutable                  = local.user_schema.mutable
-    name                     = local.user_schema.name
-    required                 = local.user_schema.required
-
-    string_attribute_constraints {
-      min_length = local.user_schema.string_attribute_constraints.min_length
-      max_length = local.user_schema.string_attribute_constraints.max_length
-    }
-  }
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      echo "VITE_COGNITO_CLIENT_ID=${aws_cognito_user_pool.this.id}" >> ./frontend/condor/.env
-    EOT
   }
 }
 
-resource "aws_cognito_user_pool_client" "this" {
-  name                = local.client_name
-  explicit_auth_flows = local.client_explicit_auth_flows
+resource "aws_cognito_user_pool_client" "userpool_client" {
+  name         = "condor-client"
+  user_pool_id = aws_cognito_user_pool.userpool.id
 
-  user_pool_id = aws_cognito_user_pool.this.id
+  explicit_auth_flows = ["ALLOW_USER_SRP_AUTH", "ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_PASSWORD_AUTH"]
 
+  generate_secret = false
 
-  provisioner "local-exec" {
-    command = <<-EOT
-      echo "VITE_COGNITO_USER_POOL_ID=${aws_cognito_user_pool.this.idaws_cognito_user_pool_client.this.id}" >> ./frontend/condor/.env
-    EOT
+  prevent_user_existence_errors = "LEGACY"
+
+  refresh_token_validity = 1
+  access_token_validity  = 1
+  id_token_validity      = 1
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "hours"
   }
 }
 
+resource "aws_cognito_user_pool_domain" "userpool_domain" {
+  domain = "dev-galar-condor-com"
+  # certificate_arn = aws_acm_certificate.cert.arn  # TODO: Add when merged with proyect, this should link to route 53
+  user_pool_id = aws_cognito_user_pool.userpool.id
+}
 

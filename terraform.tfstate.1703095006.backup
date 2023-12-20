@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.5.7",
-  "serial": 2672,
+  "serial": 2646,
   "lineage": "dcf97985-fd18-4691-cce2-c19ba92c47aa",
   "outputs": {
     "application_security_group_id": {
@@ -22,7 +22,7 @@
       ]
     },
     "cognito_client_id": {
-      "value": "4m8r38q48oe538d49rjeoauk0s",
+      "value": "76ns487ua21kr1b4plg2is4tjs",
       "type": "string"
     },
     "database_subnets": {
@@ -437,7 +437,7 @@
           "schema_version": 0,
           "attributes": {
             "arn": "arn:aws:iam::202815206333:role/LabRole",
-            "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"kendra.amazonaws.com\",\"sqs.amazonaws.com\",\"codedeploy.amazonaws.com\",\"lex.amazonaws.com\",\"cloud9.amazonaws.com\",\"secretsmanager.amazonaws.com\",\"logs.amazonaws.com\",\"athena.amazonaws.com\",\"glue.amazonaws.com\",\"ec2.amazonaws.com\",\"credentials.iot.amazonaws.com\",\"ssm.amazonaws.com\",\"cloudfront.amazonaws.com\",\"cloudtrail.amazonaws.com\",\"personalize.amazonaws.com\",\"ec2.application-autoscaling.amazonaws.com\",\"elasticloadbalancing.amazonaws.com\",\"sns.amazonaws.com\",\"elasticfilesystem.amazonaws.com\",\"iotanalytics.amazonaws.com\",\"rekognition.amazonaws.com\",\"kms.amazonaws.com\",\"apigateway.amazonaws.com\",\"sagemaker.amazonaws.com\",\"s3.amazonaws.com\",\"redshift.amazonaws.com\",\"eks.amazonaws.com\",\"application-autoscaling.amazonaws.com\",\"cloudformation.amazonaws.com\",\"servicecatalog.amazonaws.com\",\"rds.amazonaws.com\",\"kinesisanalytics.amazonaws.com\",\"backup.amazonaws.com\",\"kinesis.amazonaws.com\",\"events.amazonaws.com\",\"databrew.amazonaws.com\",\"cognito-idp.amazonaws.com\",\"dynamodb.amazonaws.com\",\"firehose.amazonaws.com\",\"eks-fargate-pods.amazonaws.com\",\"datapipeline.amazonaws.com\",\"lambda.amazonaws.com\",\"deepracer.amazonaws.com\",\"quicksight.amazonaws.com\",\"forecast.amazonaws.com\",\"iotevents.amazonaws.com\",\"elasticmapreduce.amazonaws.com\",\"iot.amazonaws.com\",\"storagegateway.amazonaws.com\",\"ecs-tasks.amazonaws.com\",\"resource-groups.amazonaws.com\",\"robomaker.amazonaws.com\",\"scheduler.amazonaws.com\",\"codecommit.amazonaws.com\",\"batch.amazonaws.com\",\"autoscaling.amazonaws.com\",\"elasticbeanstalk.amazonaws.com\",\"states.amazonaws.com\"],\"AWS\":\"arn:aws:iam::202815206333:role/LabRole\"},\"Action\":\"sts:AssumeRole\"}]}",
+            "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":[\"application-autoscaling.amazonaws.com\",\"rekognition.amazonaws.com\",\"codecommit.amazonaws.com\",\"lambda.amazonaws.com\",\"sns.amazonaws.com\",\"ecs-tasks.amazonaws.com\",\"elasticfilesystem.amazonaws.com\",\"datapipeline.amazonaws.com\",\"iotanalytics.amazonaws.com\",\"elasticloadbalancing.amazonaws.com\",\"dynamodb.amazonaws.com\",\"iot.amazonaws.com\",\"events.amazonaws.com\",\"cloudtrail.amazonaws.com\",\"iotevents.amazonaws.com\",\"storagegateway.amazonaws.com\",\"logs.amazonaws.com\",\"cloud9.amazonaws.com\",\"cloudfront.amazonaws.com\",\"lex.amazonaws.com\",\"personalize.amazonaws.com\",\"ec2.amazonaws.com\",\"rds.amazonaws.com\",\"forecast.amazonaws.com\",\"batch.amazonaws.com\",\"scheduler.amazonaws.com\",\"robomaker.amazonaws.com\",\"resource-groups.amazonaws.com\",\"servicecatalog.amazonaws.com\",\"backup.amazonaws.com\",\"credentials.iot.amazonaws.com\",\"autoscaling.amazonaws.com\",\"kms.amazonaws.com\",\"elasticbeanstalk.amazonaws.com\",\"ec2.application-autoscaling.amazonaws.com\",\"elasticmapreduce.amazonaws.com\",\"athena.amazonaws.com\",\"cloudformation.amazonaws.com\",\"quicksight.amazonaws.com\",\"states.amazonaws.com\",\"codedeploy.amazonaws.com\",\"firehose.amazonaws.com\",\"sqs.amazonaws.com\",\"apigateway.amazonaws.com\",\"eks.amazonaws.com\",\"kinesisanalytics.amazonaws.com\",\"kinesis.amazonaws.com\",\"cognito-idp.amazonaws.com\",\"kendra.amazonaws.com\",\"glue.amazonaws.com\",\"secretsmanager.amazonaws.com\",\"deepracer.amazonaws.com\",\"redshift.amazonaws.com\",\"s3.amazonaws.com\",\"eks-fargate-pods.amazonaws.com\",\"ssm.amazonaws.com\",\"databrew.amazonaws.com\",\"sagemaker.amazonaws.com\"],\"AWS\":\"arn:aws:iam::202815206333:role/LabRole\"},\"Action\":\"sts:AssumeRole\"}]}",
             "create_date": "2023-08-09T22:41:34Z",
             "description": "",
             "id": "LabRole",
@@ -447,7 +447,7 @@
             "permissions_boundary": "",
             "role_last_used": [
               {
-                "last_used_date": "2023-12-20T17:32:43Z",
+                "last_used_date": "2023-12-20T16:39:00Z",
                 "region": "us-east-1"
               }
             ],
@@ -491,13 +491,13 @@
             "arn": "arn:aws:apigateway:us-east-1::/restapis/f220odny0g/authorizers/d4px0a",
             "authorizer_credentials": "arn:aws:iam::202815206333:role/LabRole",
             "authorizer_result_ttl_in_seconds": 300,
-            "authorizer_uri": "arn:aws:cognito-idp:us-east-1:202815206333:userpool/us-east-1_i4FsQ9GC6",
+            "authorizer_uri": "arn:aws:cognito-idp:us-east-1:202815206333:userpool/us-east-1_0PM4O4VLE",
             "id": "d4px0a",
             "identity_source": "method.request.header.Authorization",
             "identity_validation_expression": "",
             "name": "main",
             "provider_arns": [
-              "arn:aws:cognito-idp:us-east-1:202815206333:userpool/us-east-1_i4FsQ9GC6"
+              "arn:aws:cognito-idp:us-east-1:202815206333:userpool/us-east-1_0PM4O4VLE"
             ],
             "rest_api_id": "f220odny0g",
             "type": "COGNITO_USER_POOLS"
@@ -507,7 +507,7 @@
           "dependencies": [
             "data.aws_caller_identity.current",
             "module.api_gateway.aws_api_gateway_rest_api.this",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ]
         }
       ]
@@ -549,7 +549,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -643,7 +643,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ]
         }
       ]
@@ -689,7 +689,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -727,7 +727,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -767,7 +767,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -798,7 +798,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -840,7 +840,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -873,7 +873,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -911,7 +911,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -940,7 +940,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1012,7 +1012,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1050,7 +1050,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1090,7 +1090,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1121,7 +1121,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1163,7 +1163,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1196,7 +1196,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1234,7 +1234,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1263,7 +1263,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1335,7 +1335,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1373,7 +1373,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1413,7 +1413,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1444,7 +1444,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1486,7 +1486,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1519,7 +1519,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1557,7 +1557,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1586,7 +1586,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1658,7 +1658,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1696,7 +1696,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1736,7 +1736,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1767,7 +1767,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1809,7 +1809,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1842,7 +1842,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -1880,7 +1880,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         },
@@ -1909,7 +1909,7 @@
             "module.api_gateway.module.api_gateway_endpoint.aws_api_gateway_resource.this",
             "module.api_gateway.module.lambda.aws_lambda_function.index",
             "module.api_gateway.module.lambda.aws_lambda_permission.apigw_lambda",
-            "module.cognito.aws_cognito_user_pool.userpool"
+            "module.cognito.aws_cognito_user_pool.this"
           ],
           "create_before_destroy": true
         }
@@ -3016,7 +3016,7 @@
         {
           "schema_version": 1,
           "attributes": {
-            "aliases": [],
+            "aliases": null,
             "arn": "arn:aws:cloudfront::202815206333:distribution/EEORLYSF84EUW",
             "caller_reference": "terraform-20231220171353543500000002",
             "comment": "CDN",
@@ -3384,6 +3384,182 @@
       ]
     },
     {
+      "module": "module.cognito",
+      "mode": "managed",
+      "type": "aws_cognito_user_pool",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_recovery_setting": [
+              {
+                "recovery_mechanism": [
+                  {
+                    "name": "verified_email",
+                    "priority": 1
+                  },
+                  {
+                    "name": "verified_phone_number",
+                    "priority": 2
+                  }
+                ]
+              }
+            ],
+            "admin_create_user_config": [
+              {
+                "allow_admin_create_user_only": false,
+                "invite_message_template": []
+              }
+            ],
+            "alias_attributes": [
+              "email"
+            ],
+            "arn": "arn:aws:cognito-idp:us-east-1:202815206333:userpool/us-east-1_0PM4O4VLE",
+            "auto_verified_attributes": [
+              "email"
+            ],
+            "creation_date": "2023-12-20T17:11:13Z",
+            "custom_domain": "",
+            "deletion_protection": "INACTIVE",
+            "device_configuration": [],
+            "domain": "",
+            "email_configuration": [
+              {
+                "configuration_set": "",
+                "email_sending_account": "COGNITO_DEFAULT",
+                "from_email_address": "",
+                "reply_to_email_address": "",
+                "source_arn": ""
+              }
+            ],
+            "email_verification_message": "Please use the following code: {####}",
+            "email_verification_subject": "Your Verification Code",
+            "endpoint": "cognito-idp.us-east-1.amazonaws.com/us-east-1_0PM4O4VLE",
+            "estimated_number_of_users": 0,
+            "id": "us-east-1_0PM4O4VLE",
+            "lambda_config": [],
+            "last_modified_date": "2023-12-20T17:13:27Z",
+            "mfa_configuration": "OFF",
+            "name": "this",
+            "password_policy": [
+              {
+                "minimum_length": 6,
+                "require_lowercase": true,
+                "require_numbers": true,
+                "require_symbols": true,
+                "require_uppercase": true,
+                "temporary_password_validity_days": 7
+              }
+            ],
+            "schema": [
+              {
+                "attribute_data_type": "String",
+                "developer_only_attribute": false,
+                "mutable": true,
+                "name": "email",
+                "number_attribute_constraints": [],
+                "required": true,
+                "string_attribute_constraints": [
+                  {
+                    "max_length": "256",
+                    "min_length": "4"
+                  }
+                ]
+              },
+              {
+                "attribute_data_type": "String",
+                "developer_only_attribute": false,
+                "mutable": true,
+                "name": "name",
+                "number_attribute_constraints": [],
+                "required": true,
+                "string_attribute_constraints": [
+                  {
+                    "max_length": "256",
+                    "min_length": "3"
+                  }
+                ]
+              }
+            ],
+            "sms_authentication_message": "",
+            "sms_configuration": [],
+            "sms_verification_message": "",
+            "software_token_mfa_configuration": [],
+            "tags": {},
+            "tags_all": {},
+            "user_attribute_update_settings": [],
+            "user_pool_add_ons": [],
+            "username_attributes": [],
+            "username_configuration": [
+              {
+                "case_sensitive": false
+              }
+            ],
+            "verification_message_template": [
+              {
+                "default_email_option": "CONFIRM_WITH_CODE",
+                "email_message": "Please use the following code: {####}",
+                "email_message_by_link": "",
+                "email_subject": "Your Verification Code",
+                "email_subject_by_link": "",
+                "sms_message": ""
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.cognito",
+      "mode": "managed",
+      "type": "aws_cognito_user_pool_client",
+      "name": "this",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_token_validity": 0,
+            "allowed_oauth_flows": [],
+            "allowed_oauth_flows_user_pool_client": false,
+            "allowed_oauth_scopes": [],
+            "analytics_configuration": [],
+            "auth_session_validity": 3,
+            "callback_urls": [],
+            "client_secret": "",
+            "default_redirect_uri": "",
+            "enable_propagate_additional_user_context_data": false,
+            "enable_token_revocation": true,
+            "explicit_auth_flows": [
+              "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+              "ALLOW_REFRESH_TOKEN_AUTH",
+              "ALLOW_USER_PASSWORD_AUTH"
+            ],
+            "generate_secret": null,
+            "id": "76ns487ua21kr1b4plg2is4tjs",
+            "id_token_validity": 0,
+            "logout_urls": [],
+            "name": "this",
+            "prevent_user_existence_errors": "",
+            "read_attributes": [],
+            "refresh_token_validity": 30,
+            "supported_identity_providers": [],
+            "token_validity_units": [],
+            "user_pool_id": "us-east-1_0PM4O4VLE",
+            "write_attributes": []
+          },
+          "sensitive_attributes": [],
+          "dependencies": [
+            "module.cognito.aws_cognito_user_pool.this"
+          ]
+        }
+      ]
+    },
+    {
       "module": "module.database_security_group",
       "mode": "managed",
       "type": "aws_security_group",
@@ -3738,7 +3914,7 @@
             ],
             "object_lock_configuration": [],
             "object_lock_enabled": false,
-            "policy": "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity EMBJ9BEKNZ4QK\"},\"Resource\":[\"arn:aws:s3:::galar.dev.condor.com/*\",\"arn:aws:s3:::galar.dev.condor.com\"],\"Sid\":\"PublicReadGetObject\"}],\"Version\":\"2012-10-17\"}",
+            "policy": "",
             "region": "us-east-1",
             "replication_configuration": [],
             "request_payer": "BucketOwner",
@@ -4383,7 +4559,7 @@
                     "sse_algorithm": "AES256"
                   }
                 ],
-                "bucket_key_enabled": false
+                "bucket_key_enabled": null
               }
             ]
           },
@@ -5109,7 +5285,7 @@
             "latency_routing_policy": [],
             "multivalue_answer_routing_policy": false,
             "name": "galar.dev.condor.com.s3.us-east-1.amazonaws.com",
-            "records": [],
+            "records": null,
             "set_identifier": "",
             "ttl": 0,
             "type": "A",
@@ -5374,14 +5550,6 @@
           ]
         }
       ]
-    },
-    {
-      "module": "module.sns",
-      "mode": "managed",
-      "type": "aws_sns_topic_subscription",
-      "name": "this",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
     },
     {
       "module": "module.vpc",
@@ -5658,14 +5826,6 @@
           ]
         }
       ]
-    },
-    {
-      "module": "module.vpc",
-      "mode": "managed",
-      "type": "aws_subnet",
-      "name": "database",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": []
     },
     {
       "module": "module.vpc",
