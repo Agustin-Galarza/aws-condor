@@ -58,6 +58,7 @@ function Root() {
           >
             PNG, JPG, Mp4
           </p>
+          {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
         </div>
         <button
           type="submit"
