@@ -32,4 +32,3 @@ output "api_gateway_authorizer_id" {
   description = "The id of the api gateway authorizer"
 }
 
-
