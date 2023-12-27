@@ -3,11 +3,11 @@ data "aws_iam_role" "lab_role" {
 }
 
 data "aws_caller_identity" "current" {
-  provider = aws.aws
+  provider = aws
 }
 
 data "aws_region" "current" {
-  provider = aws.aws
+  provider = aws
 }
 
 data "aws_availability_zones" "available" {
@@ -31,3 +31,5 @@ data "aws_iam_policy_document" "dynamodb_endpoint_policy" {
     resources = ["arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${module.dynamo.name}"]
   }
 }
+
+

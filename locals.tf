@@ -16,4 +16,6 @@ locals {
   tags = {
     type = "vpc"
   }
+
+
 }

@@ -19,7 +19,7 @@ resource "null_resource" "generate_env_file" {
 
 // Build the application frontend and store it in the resources/frontend directory
 data "external" "npm_build" {
-  program = ["bash", "${path.module}/npm_build.sh"]
+  program = ["bash", "${path.module}/scripts/npm_build.sh"]
 
   depends_on = [
     null_resource.generate_env_file
