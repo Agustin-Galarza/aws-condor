@@ -1,8 +1,5 @@
 resource "aws_route53_zone" "this" {
   name = var.domain_name
-  tags = {
-    "Name" = "main"
-  }
 }
 
 resource "aws_route53_record" "domain_record" {
