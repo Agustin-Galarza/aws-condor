@@ -9,8 +9,8 @@ locals {
 
   security_groups_prefix = "${local.name}-security-group"
 
-  frontend_bucket_name = "galar.dev.condor.com"
-  frontend_folder      = "./resources/frontend"
+  frontend_bucket_name = "benve.dev.condor.com"
+  frontend_folder      = "./resources/frontend/condor/dist"
 
 
   tags = {

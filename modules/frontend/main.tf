@@ -13,6 +13,41 @@ module "logs" {
   object_ownership         = "ObjectWriter"
 }
 
+
+# module "reports" {
+#   source        = "terraform-aws-modules/s3-bucket/aws"
+#   bucket_prefix = local.reports_bucket_name
+#   acl           = "private"
+
+#   force_destroy = true
+
+#   server_side_encryption_configuration = {
+#     rule = {
+#       apply_server_side_encryption_by_default = {
+#         sse_algorithm = "AES256"
+#       }
+#     }
+#   }
+
+
+#   cors_rule = { // TODO: Check if this is correct
+#     allowed_headers = ["*"]
+#     allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
+#     allowed_origins = ["*"]
+#     expose_headers  = ["ETag"]
+#     max_age_seconds = 3000
+#   }
+
+#   attach_deny_insecure_transport_policy = true
+#   attach_require_latest_tls_policy      = true
+
+#   control_object_ownership = true
+#   object_ownership         = "ObjectWriter"
+
+#   tags = {
+#     type = "reports"
+#   }
+# }
 // Imágenes
 resource "aws_s3_bucket" "reports" {
   bucket = "reportes.dev.condor.com"
@@ -24,14 +59,6 @@ resource "aws_s3_bucket" "reports" {
     type = "reports"
   }
 }
-
-# resource "aws_s3_bucket_logging" "reports" {
-#   bucket = aws_s3_bucket.reports.id
-
-#   target_bucket = module.logs.s3_bucket_id
-#   target_prefix = "log/"
-# }
-
 resource "aws_s3_bucket_public_access_block" "reports" {
   bucket = aws_s3_bucket.reports.id
 
@@ -155,6 +182,8 @@ resource "aws_s3_bucket" "www" {
   tags = {
     type = "frontend"
   }
+
+  depends_on = [aws_s3_bucket.frontend]
 }
 
 resource "aws_s3_bucket_ownership_controls" "www" {

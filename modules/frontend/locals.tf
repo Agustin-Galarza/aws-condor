@@ -10,6 +10,7 @@ locals {
   }
 
   www_frontend_bucket_name = "www.${var.frontend_name}"
+  reports_bucket_name      = "reports.${var.frontend_name}"
 
 
   file_with_type = flatten([
