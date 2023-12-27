@@ -9,10 +9,6 @@ locals {
     "jpeg" = "image/jpeg",
   }
 
-  www_frontend_bucket_name = "www.${var.frontend_name}"
-  reports_bucket_name      = "reports.${var.frontend_name}"
-
-
   file_with_type = flatten([
     for type, mime in local.filetypes : [
       for file in fileset("${var.frontend_folder}/", "**.${type}") : {
@@ -22,5 +18,4 @@ locals {
     ]
   ])
 
-  logs_bucket_name = "${var.frontend_name}-logs"
 }
