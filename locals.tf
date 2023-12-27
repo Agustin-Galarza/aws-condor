@@ -9,13 +9,14 @@ locals {
 
   security_groups_prefix = "${local.name}-security-group"
 
-  frontend_bucket_name = "benve.dev.condor.com"
+  frontend_bucket_name = "condor.abenve.ar"
+  www_bucket_name      = "www.condor.abenve.ar"
   frontend_folder      = "./resources/frontend/condor/dist"
 
 
   tags = {
     type = "vpc"
   }
-
-
 }
+
+
