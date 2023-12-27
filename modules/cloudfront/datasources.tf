@@ -11,6 +11,6 @@ data "aws_iam_policy_document" "frontend_OAI_policy" {
   }
 }
 
-data "aws_cloudfront_cache_policy" "optimized_policy" {
+data "aws_cloudfront_cache_policy" "optimized" {
   name = "Managed-CachingOptimized"
 }

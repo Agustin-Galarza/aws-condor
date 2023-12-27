@@ -2,10 +2,6 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = "OAI for our domain"
 }
 
-data "aws_cloudfront_cache_policy" "optimized" {
-  name = "Managed-CachingOptimized"
-}
-
 resource "aws_cloudfront_distribution" "this" {
 
   origin {
@@ -19,6 +15,9 @@ resource "aws_cloudfront_distribution" "this" {
       origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
+
+  aliases = var.aliases
+
   origin {
     domain_name = var.website_bucket_regional_domain_name
     origin_id   = var.s3_bucket_id
@@ -58,6 +57,8 @@ resource "aws_cloudfront_distribution" "this" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1.2_2021"
+    ssl_support_method             = "sni-only"
   }
 
   tags = {

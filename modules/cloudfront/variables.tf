@@ -8,8 +8,11 @@ variable "s3_bucket_id" {
   type        = string
 }
 
+
 variable "aliases" {
-  type = set(string)
+  description = "Aliases"
+  type        = list(string)
+  default     = []
 }
 
 variable "certificate_arn" {
