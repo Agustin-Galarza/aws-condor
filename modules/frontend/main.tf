@@ -1,6 +1,7 @@
 
 module "reports" {
-  source        = "terraform-aws-modules/s3-bucket/aws"
+  source = "terraform-aws-modules/s3-bucket/aws"
+  # bucket        = var.base_name
   bucket_prefix = "reports-"
 
   force_destroy = true
@@ -81,16 +82,16 @@ module "www" {
   }
 }
 
-resource "aws_s3_object" "data" {
-  for_each = { for file in local.file_with_type : file.name => file }
+# resource "aws_s3_object" "data" {
+#   for_each = { for file in local.file_with_type : file.name => file }
 
-  bucket        = module.frontend.s3_bucket_id
-  key           = each.value.name
-  source        = "${var.frontend_folder}/${each.value.name}"
-  etag          = filemd5("${var.frontend_folder}/${each.value.name}")
-  content_type  = each.value.type
-  storage_class = "STANDARD"
-}
+#   bucket        = module.frontend.s3_bucket_id
+#   key           = each.value.name
+#   source        = "${var.frontend_folder}/${each.value.name}"
+#   etag          = filemd5("${var.frontend_folder}/${each.value.name}")
+#   content_type  = each.value.type
+#   storage_class = "STANDARD"
+# }
 
 # resource "aws_s3_object" "data" {
 #   for_each = { for file in local.file_with_type : file.dest => file }

@@ -7,8 +7,12 @@ output "frontend_domain_name" {
   value = module.frontend.s3_bucket_website_domain
 }
 
-output "frontend_bucket" {
+output "frontend_bucket_id" {
   value = module.frontend.s3_bucket_id
+}
+
+output "fronted_bucket_domain_name" {
+  value = module.frontend.s3_bucket_bucket_domain_name
 }
 
 output "frontend_bucket_rdn" {

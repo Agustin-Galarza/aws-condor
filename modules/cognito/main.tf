@@ -33,6 +33,14 @@ resource "aws_cognito_user_pool" "userpool" {
       priority = 1
     }
   }
+
+  lifecycle {
+
+    ignore_changes = [
+      password_policy,
+      schema
+    ]
+  }
 }
 
 resource "aws_cognito_user_pool_client" "userpool_client" {

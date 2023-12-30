@@ -1,4 +1,5 @@
-variable "frontend_folder" {
-  description = "The folder where the frontend are located"
+variable "base_name" {
+  description = "The base name to use for the buckets"
   type        = string
+  default     = null
 }

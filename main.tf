@@ -3,10 +3,10 @@ resource "null_resource" "generate_env_file" {
   provisioner "local-exec" {
     // TODO: Is "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" ok?
     command = <<-EOT
-      echo "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" > ./frontend/condor/.env 
-      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.user_pool_client_id}" >> ./frontend/condor/.env
-      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.id}" >> ./frontend/condor/.env
-      echo "VITE_CLOUDFRONT_URL=${module.cloudfront.cloudfront_domain_name}" >> ./frontend/condor/.env
+      echo "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" > ${local.frontend_folder}/.env 
+      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.user_pool_client_id}" >> ${local.frontend_folder}/.env
+      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.id}" >> ${local.frontend_folder}/.env
+      echo "VITE_CLOUDFRONT_URL=${module.cloudfront.cloudfront_domain_name}" >> ${local.frontend_folder}/.env
     EOT
   }
   depends_on = [
@@ -26,12 +26,29 @@ data "external" "npm_build" {
   ]
 }
 
+resource "aws_s3_object" "data" {
+  for_each = { for file in local.file_with_type : file.name => file }
+
+  bucket        = module.frontend.frontend_bucket_id
+  key           = each.value.name
+  source        = "${local.frontend_build_folder}/${each.value.name}"
+  etag          = filemd5("${local.frontend_build_folder}/${each.value.name}")
+  content_type  = each.value.type
+  storage_class = "STANDARD"
+
+  depends_on = [
+    module.frontend,
+    data.external.npm_build
+  ]
+}
+
+
 
 // Build all services
 
 module "frontend" {
-  source          = "./modules/frontend"
-  frontend_folder = local.frontend_folder
+  source    = "./modules/frontend"
+  base_name = local.frontend_bucket_name
 }
 
 module "dynamo" {
@@ -51,22 +68,33 @@ module "dynamo" {
 }
 
 module "cloudfront" {
-  source                              = "./modules/cloudfront"
-  s3_bucket_id                        = module.frontend.frontend_bucket
-  website_bucket_regional_domain_name = module.frontend.frontend_bucket_rdn
-  certificate_arn                     = module.acm.certificate_arn
-  api_gw_id                           = module.api_gateway.api_gateway_id
-  api_gw_stage                        = module.api_gateway.api_gateway_stage
-  region                              = data.aws_region.current.name
+  source = "./modules/cloudfront"
 
-  s3_bucket_origin_id = module.frontend.www_bucket_rdn
-  s3_bucket_arn       = module.frontend.frontend_bucket_arn
+  static_website = {
+    id                  = module.frontend.frontend_bucket_id
+    domain_name         = module.frontend.frontend_bucket_rdn
+    bucket_arn          = module.frontend.frontend_bucket_arn
+    default_root_object = "index.html"
+  }
+  # certificate_arn = module.acm.certificate_arn
+  api_gw = {
+    id         = module.api_gateway.api_gateway_id
+    stage      = module.api_gateway.api_gateway_stage
+    invoke_url = module.api_gateway.api_gateway_invoke_url
+  }
+  region = data.aws_region.current.name
 
   aliases = [
     local.frontend_bucket_name,
     local.www_bucket_name,
   ]
-  depends_on = [module.frontend, module.acm]
+
+  frontend_folder = local.frontend_folder
+
+  depends_on = [
+    module.frontend,
+    # module.acm
+  ]
 }
 
 
@@ -167,12 +195,12 @@ module "api_gateway" {
 
   ]
 }
-module "acm" {
-  source      = "./modules/acm"
-  domain_name = local.frontend_bucket_name
+# module "acm" {
+#   source      = "./modules/acm"
+#   domain_name = local.frontend_bucket_name
 
-  # depends_on = [module.route53]
-}
+#   # depends_on = [module.route53]
+# }
 
 module "sns" {
   source  = "terraform-aws-modules/sns/aws"
@@ -196,11 +224,11 @@ module "sns" {
   EOF
 }
 
-module "route53" {
-  source      = "./modules/route53"
-  domain_name = local.frontend_bucket_name
-  cloudfront  = module.cloudfront.cloudfront_distribution
-}
+# module "route53" {
+#   source      = "./modules/route53"
+#   domain_name = local.frontend_bucket_name
+#   cloudfront  = module.cloudfront.cloudfront_distribution
+# }
 
 
 module "vpc" {

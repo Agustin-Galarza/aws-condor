@@ -1,13 +1,24 @@
-data "aws_iam_policy_document" "frontend_OAI_policy" {
+data "aws_caller_identity" "this" {}
+
+data "aws_iam_policy_document" "this" {
+  version   = "2008-10-17"
+  policy_id = "PolicyForCloudFrontPrivateContent"
   statement {
-    sid     = "PublicReadGetObject"
-    effect  = "Allow"
-    actions = ["s3:GetObject"]
+    sid    = "AllowCloudFrontServicePrincipal"
+    effect = "Allow"
     principals {
-      type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.oai.iam_arn]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
-    resources = [var.s3_bucket_arn, "${var.s3_bucket_arn}/*"]
+    actions   = ["s3:GetObject"]
+    resources = ["${var.static_website.bucket_arn}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values = [
+        aws_cloudfront_distribution.this.arn
+      ]
+    }
   }
 }
 

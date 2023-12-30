@@ -1,4 +1,6 @@
-
+output "zz_frontend_files" {
+  value = local.file_with_type
+}
 
 output "vpc_id" {
   description = "The ID of the VPC"
@@ -53,3 +55,10 @@ output "application_security_group_id" {
   value = module.application_security_group.id
 }
 
+output "cloudfront_domain_name" {
+  value = module.cloudfront.cloudfront_domain_name
+}
+
+output "api_invoke_url" {
+  value = module.api_gateway.api_gateway_invoke_url
+}
