@@ -2,6 +2,10 @@ output "zz_frontend_files" {
   value = local.file_with_type
 }
 
+output "zz_build_message" {
+  value = data.external.npm_build.result.message
+}
+
 output "vpc_id" {
   description = "The ID of the VPC"
   value       = module.vpc.vpc_id
@@ -32,10 +36,10 @@ output "database_subnets" {
   value       = module.vpc.database_subnets
 }
 
-output "vpc_endpoints_id" {
-  description = "The IDs of the VPC endpoints"
-  value       = [for key, value in module.vpc_endpoints : value]
-}
+# output "vpc_endpoints_id" {
+#   description = "The IDs of the VPC endpoints"
+#   value       = [for key, value in module.vpc_endpoints : value]
+# }
 
 output "sns" {
   value       = module.sns
