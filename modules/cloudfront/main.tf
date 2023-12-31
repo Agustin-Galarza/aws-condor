@@ -18,6 +18,10 @@ resource "aws_cloudfront_function" "viewer_request" {
   code    = file("${path.root}/resources/cloudfront/${var.viewer_request_function}.js")
 }
 
+#######################################
+#       Cloudfront Distribution       #
+#######################################
+
 resource "aws_cloudfront_distribution" "this" {
 
   origin {
@@ -51,19 +55,20 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = var.static_website.id # Use the s3 origin
 
-    # Don't forward query string or cookies
+    cache_policy_id = aws_cloudfront_cache_policy.frontend_cache_policy.id
+
     # forwarded_values {
     #   query_string = false
+
     #   cookies {
     #     forward = "none"
     #   }
     # }
-    cache_policy_id          = data.aws_cloudfront_cache_policy.frontend_cache_policy.id
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.frontend_request_policy.id
 
-    default_ttl = 0
-    min_ttl     = 10
-    max_ttl     = 10
+    # default_ttl = 0
+    # min_ttl     = 10
+    # max_ttl     = 10
+    # compress = true
 
     function_association {
       event_type   = "viewer-request"
@@ -79,21 +84,20 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.api_gw_origin_id # Use the apigw origin
 
-    # Disable caching
-    # default_ttl = 0
+    # default_ttl = 1
     # min_ttl     = 0
-    # max_ttl     = 0
-
-    cache_policy_id          = data.aws_cloudfront_cache_policy.api_gw_cache_policy.id
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.api_gw_request_policy.id
-    # Forward everything
+    # max_ttl     = 1
+    # compress    = false
     # forwarded_values {
     #   query_string = true
-    #   headers      = ["Authorization"]
+
+    #   headers = ["Authorization"]
     #   cookies {
     #     forward = "all"
     #   }
     # }
+
+    cache_policy_id = aws_cloudfront_cache_policy.api_gw_cache_policy.id
 
     viewer_protocol_policy = "redirect-to-https"
   }
@@ -118,5 +122,64 @@ resource "aws_cloudfront_distribution" "this" {
     command = <<-EOT
       echo "VITE_API_URL=${aws_cloudfront_distribution.this.domain_name}" >> ${var.frontend_folder}/.env
     EOT
+  }
+
+  depends_on = [
+    aws_cloudfront_function.viewer_request,
+    aws_cloudfront_cache_policy.frontend_cache_policy,
+    aws_cloudfront_cache_policy.api_gw_cache_policy
+  ]
+}
+
+#################################
+#       Request Policies        #
+#################################
+
+resource "aws_cloudfront_cache_policy" "frontend_cache_policy" {
+  name    = "Condor-Custom-CachingOptimized"
+  comment = "Custom policy equivalent to CachingOptimized so terraform doesn't throw errors on the apply operation"
+
+  default_ttl = 86400
+  min_ttl     = 1
+  max_ttl     = 31536000
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = true
+    enable_accept_encoding_gzip   = true
+    cookies_config {
+      cookie_behavior = "none"
+    }
+    headers_config {
+      header_behavior = "none"
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+  }
+
+}
+
+resource "aws_cloudfront_cache_policy" "api_gw_cache_policy" {
+  name    = "Condor-Custom-CachingDisabled"
+  comment = "Custom policy equivalent to CachingDisabled so terraform doesn't throw errors on the apply operation"
+
+  default_ttl = 1
+  max_ttl     = 1
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = false
+    enable_accept_encoding_gzip   = false
+    cookies_config {
+      cookie_behavior = "all"
+    }
+    headers_config {
+      header_behavior = "whitelist"
+      headers {
+        items = ["Authorization"]
+      }
+    }
+    query_strings_config {
+      query_string_behavior = "all"
+    }
   }
 }

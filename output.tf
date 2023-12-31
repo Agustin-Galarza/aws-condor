@@ -2,6 +2,10 @@ output "zz_frontend_files" {
   value = local.file_with_type
 }
 
+output "zz_build_message" {
+  value = data.external.npm_build.result.message
+}
+
 output "vpc_id" {
   description = "The ID of the VPC"
   value       = module.vpc.vpc_id

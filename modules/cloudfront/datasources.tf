@@ -22,7 +22,6 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-# TODO: create our own policies, identical to these ones to aviod the 'Error: Provider produced inconsistent final plan'
 data "aws_cloudfront_cache_policy" "frontend_cache_policy" {
   name = "Managed-CachingOptimized"
 }
