@@ -6,7 +6,7 @@ resource "aws_api_gateway_resource" "this" {
 }
 
 resource "aws_api_gateway_method" "this" {
-  for_each = {for method in var.methods : method.http_method => method}
+  for_each      = { for method in var.methods : method.http_method => method }
   rest_api_id   = var.rest_api_id
   resource_id   = aws_api_gateway_resource.this.id
   http_method   = each.value.http_method
@@ -21,7 +21,7 @@ resource "aws_api_gateway_method" "this" {
 }
 
 resource "aws_api_gateway_integration" "this" {
-  for_each = {for method in var.methods : method.http_method => method}
+  for_each = { for method in var.methods : method.http_method => method }
 
   rest_api_id = var.rest_api_id
   resource_id = aws_api_gateway_resource.this.id
@@ -35,7 +35,7 @@ resource "aws_api_gateway_integration" "this" {
 }
 
 resource "aws_api_gateway_method_response" "this" {
-  for_each = {for method in var.methods : method.http_method => method}
+  for_each = { for method in var.methods : method.http_method => method }
 
   rest_api_id = var.rest_api_id
   resource_id = aws_api_gateway_resource.this.id
@@ -51,7 +51,7 @@ resource "aws_api_gateway_method_response" "this" {
 }
 
 resource "aws_api_gateway_integration_response" "this" {
-  for_each = {for method in var.methods : method.http_method => method}
+  for_each = { for method in var.methods : method.http_method => method }
 
   rest_api_id = var.rest_api_id
   resource_id = aws_api_gateway_resource.this.id

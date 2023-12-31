@@ -17,14 +17,6 @@ const Signup = () => {
 
 	const [signed, setSigned] = useState(false);
 
-	user!.getUserAttributes(function (err: any, res: any) {
-		if (err) {
-			console.log(err);
-			return;
-		}
-		console.log(res);
-	});
-
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
@@ -32,6 +24,7 @@ const Signup = () => {
 			if (err) {
 				console.log(err);
 				setError(err.message);
+				return;
 			}
 			console.log(data);
 			setUser(data!.user);

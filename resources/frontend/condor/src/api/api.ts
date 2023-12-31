@@ -6,9 +6,14 @@ const axiosClient = axios.create({
 	baseURL: `${import.meta.env.BASE_URL}`,
 });
 
+const STAGE_NAME = 'dev';
+
+const apiBaseUrl = () =>
+	`https://${import.meta.env.VITE_CLOUDFRONT_URL}/${STAGE_NAME}`;
+
 export const getReports = async (neighborhood: string) => {
 	const response = await axiosClient.get(
-		`${import.meta.env.VITE_API_URL}/reports?groupId=${neighborhood}`,
+		`${apiBaseUrl()}/reports?groupId=${neighborhood}`,
 		{
 			headers: {
 				Authorization: `Bearer ${userStore.getState().token}`,
@@ -20,7 +25,7 @@ export const getReports = async (neighborhood: string) => {
 
 export const postNewReport = async (username: string, report: string) => {
 	const response = await axiosClient.post(
-		`${import.meta.env.VITE_API_URL}/reports`,
+		`${apiBaseUrl()}/reports`,
 		{
 			userId: username,
 			report,
@@ -35,20 +40,17 @@ export const postNewReport = async (username: string, report: string) => {
 };
 
 export const getNeighborhoods = async () => {
-	const response = await axiosClient.get(
-		`${import.meta.env.VITE_API_URL}/groups`,
-		{
-			headers: {
-				Authorization: `Bearer ${userStore.getState().token}`,
-			},
-		}
-	);
+	const response = await axiosClient.get(`${apiBaseUrl()}/groups`, {
+		headers: {
+			Authorization: `Bearer ${userStore.getState().token}`,
+		},
+	});
 	return response.data;
 };
 
 export const addUser = async (username: string) => {
 	const response = await axiosClient.post(
-		`${import.meta.env.VITE_API_URL}/users`,
+		`${apiBaseUrl()}/users`,
 		{
 			data: {
 				username,
@@ -64,3 +66,13 @@ export const addUser = async (username: string) => {
 };
 
 export const getUser = async (username: string) => {};
+
+export const getGroups = async () => {
+	const response = await axiosClient.get(`${apiBaseUrl()}/groups`, {
+		headers: {
+			Authorization: `Bearer ${userStore.getState().token}`,
+		},
+	});
+	console.log('Get groups response: ', response);
+	return response.data;
+};

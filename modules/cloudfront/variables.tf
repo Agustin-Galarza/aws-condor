@@ -36,3 +36,9 @@ variable "region" {
 variable "frontend_folder" {
   type = string
 }
+
+variable "viewer_request_function" {
+  description = "Name for the Viewer Request Cloudfront Function"
+  type        = string
+  default     = "RemovePathForFrontend"
+}
