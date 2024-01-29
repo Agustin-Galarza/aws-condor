@@ -1,9 +1,26 @@
 const dynamo = require('./dynamo');
 const response = require('./responses');
+const request = require('./requests');
 
+/**
+ * Request:
+ * - Body: {
+ *
+ * 		username: string,
+ * 		message: string|null, // The message associated with this report
+ * 		imageUrl: string|null, // The URL for the image associated with this report
+ * }
+ * @param {*} event
+ * @param {*} context
+ * @param {*} callback
+ * @returns
+ */
 exports.handler = function (event, context, callback) {
-	const userId = event['userId'];
-	//const userId = JSON.parse(event['body'])['userId'];
+	// const userId = event['userId'];
+	const query = request.getBody(event);
+	const userId = query['username'];
+	const message = query['message'];
+	const imageUrl = query['imageUrl'];
 	if (!userId) {
 		callback(null, response.badRequest('Missing userId'));
 		return;
@@ -11,16 +28,19 @@ exports.handler = function (event, context, callback) {
 
 	dynamo
 		.findUser(userId)
-		.then(res => {
+		.then(resUser => {
 			console.log('User response', res);
+			if (resUser === null) {
+				callback(null, response.notFound('User not found'));
+				return;
+			}
 			// checkear la respuesta
 			// subir la imagen al bucket
 			const imageUrl = 'i am an url';
 
-			const userRaw = res['Item'];
 			const user = {
-				id: userRaw['PartitionKey']['S'],
-				data: { groupId: userRaw['groupId']['S'] },
+				id: dynamo.getPartitionKey(resUser),
+				data: { groupId: dynamo.getStringKey(resUser, 'groupId') },
 			};
 
 			console.log('User built', user);

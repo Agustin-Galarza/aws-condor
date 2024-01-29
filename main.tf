@@ -174,6 +174,25 @@ module "api_gateway" {
       ]
     },
     {
+      path = "users/{username}"
+      methods = [
+        {
+          name          = "users_id_get"
+          http_method   = "GET",
+          handler       = "main.handler",
+          zip_name      = "users_id_get"
+          env_variables = {}
+        },
+        {
+          name          = "users_post"
+          http_method   = "POST",
+          handler       = "main.handler",
+          zip_name      = "users_post"
+          env_variables = {}
+        }
+      ]
+    },
+    {
       path = "images"
       methods = [
         {
@@ -195,12 +214,12 @@ module "api_gateway" {
 
   ]
 }
-# module "acm" {
-#   source      = "./modules/acm"
-#   domain_name = local.frontend_bucket_name
+module "acm" {
+  source      = "./modules/acm"
+  domain_name = local.frontend_bucket_name
 
-#   # depends_on = [module.route53]
-# }
+  # depends_on = [module.route53]
+}
 
 module "sns" {
   source  = "terraform-aws-modules/sns/aws"
@@ -224,11 +243,11 @@ module "sns" {
   EOF
 }
 
-# module "route53" {
-#   source      = "./modules/route53"
-#   domain_name = local.frontend_bucket_name
-#   cloudfront  = module.cloudfront.cloudfront_distribution
-# }
+module "route53" {
+  source      = "./modules/route53"
+  domain_name = local.frontend_bucket_name
+  cloudfront  = module.cloudfront.cloudfront_distribution
+}
 
 
 module "vpc" {
@@ -271,11 +290,11 @@ module "vpc_endpoints" {
       route_table_ids = flatten([module.vpc.private_route_table_ids])
       policy          = data.aws_iam_policy_document.dynamodb_endpoint_policy.json
     },
-    # s3 = {
-    #   # interface endpoint
-    #   service = "s3"
-    #   tags    = { Name = "s3-vpc-endpoint" }
-    # },
+    s3 = {
+      # interface endpoint
+      service = "s3"
+      tags    = { Name = "s3-vpc-endpoint" }
+    },
   }
   depends_on = []
 

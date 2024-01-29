@@ -1,10 +1,15 @@
-exports.handler = function(event, context, callback) {
-  let response = {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-    },
-    body: "<h1>Hello World!</h1>",
-  };
-  callback(null, response);
-}
+const dynamo = require('./dynamo');
+const response = require('./responses');
+
+exports.handler = function (event, context, callback) {
+	dynamo
+		.getAllGroups()
+		.then(res => {
+			console.log('Ok', res);
+			callback(null, response.ok(res));
+		})
+		.catch(err => {
+			console.log('Err', err);
+			callback(null, response.serverError('There was an error finding group.'));
+		});
+};

@@ -63,9 +63,9 @@ resource "aws_cognito_user_pool_client" "userpool_client" {
   }
 }
 
-resource "aws_cognito_user_pool_domain" "userpool_domain" {
-  domain = "dev-galar-condor-com"
-  # certificate_arn = aws_acm_certificate.cert.arn  # TODO: Add when merged with proyect, this should link to route 53
-  user_pool_id = aws_cognito_user_pool.userpool.id
-}
+# resource "aws_cognito_user_pool_domain" "userpool_domain" {
+#   domain = "dev-galar-condor-com"
+#   # certificate_arn = aws_acm_certificate.cert.arn  # TODO: Add when merged with proyect, this should link to route 53
+#   user_pool_id = aws_cognito_user_pool.userpool.id
+# }
 

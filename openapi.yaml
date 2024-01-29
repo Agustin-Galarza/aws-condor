@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Retrieve a list of users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                collection:
+                  count: 2
+                  data:
+                    - username: 'user1'
+                      group: 'group1'
+                    - username: 'user2'
+                      group: 'group2'
+
+    post:
+      summary: Create a new user
+      responses:
+        '201':
+          description: User created successfully
+
+  /users/{username}:
+    get:
+      summary: Retrieve details of a specific user
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                user:
+                  username: 'user1'
+                  group: 'group1'
+
+  /groups:
+    get:
+      summary: Retrieve a list of groups
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                collection:
+                  count: 2
+                  data:
+                    - name: 'group1'
+                      members: ['user1', 'user2']
+                    - name: 'group2'
+                      members: ['user3', 'user4']
+
+    post:
+      summary: Create a new group
+      responses:
+        '201':
+          description: Group created successfully
+
+  /groups/{groupname}:
+    get:
+      summary: Retrieve details of a specific group
+      parameters:
+        - in: path
+          name: groupname
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                group:
+                  name: 'group1'
+                  members: ['user1', 'user2']
+
+    post:
+      summary: Add a member to a group
+      parameters:
+        - in: path
+          name: groupname
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Member added successfully
+
+  /reports:
+    get:
+      summary: Retrieve a list of reports
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                collection:
+                  count: 2
+                  data:
+                    - message: 'Report 1'
+                      imageURL: 'https://example.com/image1.jpg'
+                      sentAt: '2024-01-28T12:00:00Z'
+                      from: 'user1'
+                    - message: 'Report 2'
+                      imageURL: 'https://example.com/image2.jpg'
+                      sentAt: '2024-01-28T13:00:00Z'
+                      from: 'user2'
+
+    post:
+      summary: Create a new report
+      responses:
+        '201':
+          description: Report created successfully

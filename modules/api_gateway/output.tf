@@ -1,7 +1,7 @@
-output "endpoint_ids" {
-  value       = [for endpoint in module.api_gateway_endpoint : endpoint.resource_id]
-  description = "The ids of the endpoints created"
-}
+# output "endpoint_ids" {
+#   value       = [for endpoint in module.api_gateway_endpoint : endpoint.resource_id]
+#   description = "The ids of the endpoints created"
+# }
 
 output "api_gateway_arn" {
   value = aws_api_gateway_rest_api.this.execution_arn

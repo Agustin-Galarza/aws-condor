@@ -1,11 +1,23 @@
 const dynamo = require('./dynamo');
 const response = require('./responses');
+const request = require('./requests');
 
+/**
+ * Request:
+ * - body: {
+ *
+ * 		username: string
+ * }
+ * @param {*} event
+ * @param {*} context
+ * @param {*} callback
+ * @returns
+ */
 exports.handler = function (event, context, callback) {
-	const userId = JSON.parse(event['body'])['userId'];
+	const userId = request.getBody(event)['username'];
 	//const userId = event['userId']
 	if (!userId) {
-		callback(null, response.badRequest('Missing userId (should be username)'));
+		callback(null, response.badRequest('Missing username'));
 		return;
 	}
 

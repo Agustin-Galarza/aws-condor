@@ -4,29 +4,23 @@ const request = require('./requests');
 
 /**
  * Request:
- * - body: {
- *
- *    groupName: string // The name of the group to create
- * }
  * @param {*} event
  * @param {*} context
  * @param {*} callback
  * @returns
  */
 exports.handler = function (event, context, callback) {
-	const groupName = request.getBody(event)['groupName'];
-	//const userId = event['userId']
-	if (!groupName) {
-		callback(null, response.badRequest('Missing groupName'));
-		return;
-	}
+	//const userId = event['username'];
+	const userId = request.getQueryParams(event)['username'];
 
 	dynamo
-		.createGroup(groupName)
+		.findUser(userId)
 		.then(res => {
+			console.log('Ok', res);
 			callback(null, response.ok(res));
 		})
 		.catch(err => {
-			callback(null, response.serverError(err));
+			console.log('Err', err);
+			callback(null, response.serverError('There was an error finding group.'));
 		});
 };

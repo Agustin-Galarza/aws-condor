@@ -36,10 +36,10 @@ output "database_subnets" {
   value       = module.vpc.database_subnets
 }
 
-# output "vpc_endpoints_id" {
-#   description = "The IDs of the VPC endpoints"
-#   value       = [for key, value in module.vpc_endpoints : value]
-# }
+output "vpc_endpoints_id" {
+  description = "The IDs of the VPC endpoints"
+  value       = [for key, value in module.vpc_endpoints : value]
+}
 
 output "sns" {
   value       = module.sns
