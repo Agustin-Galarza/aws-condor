@@ -66,3 +66,7 @@ output "cloudfront_domain_name" {
 output "api_invoke_url" {
   value = module.api_gateway.api_gateway_invoke_url
 }
+
+output "frontend_upload" {
+  value = aws_s3_object.data
+}

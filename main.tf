@@ -3,10 +3,10 @@ resource "null_resource" "generate_env_file" {
   provisioner "local-exec" {
     // TODO: Is "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" ok?
     command = <<-EOT
-      echo "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" > ${local.frontend_folder}/.env 
-      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.id}" >> ${local.frontend_folder}/.env
-      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.user_pool_client_id}" >> ${local.frontend_folder}/.env
-      echo "VITE_CLOUDFRONT_URL=${module.cloudfront.cloudfront_domain_name}" >> ${local.frontend_folder}/.env
+      echo "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" > ${local.frontend_folder}/.env ; 
+      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.user_pool_client_id}" >> ${local.frontend_folder}/.env ;
+      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.id}" >> ${local.frontend_folder}/.env ;
+      echo "VITE_CLOUDFRONT_URL=${module.cloudfront.cloudfront_domain_name}" >> ${local.frontend_folder}/.env ;
     EOT
   }
   depends_on = [
@@ -18,9 +18,10 @@ resource "null_resource" "generate_env_file" {
 
 
 // Build the application frontend and store it in the resources/frontend directory
-data "external" "npm_build" {
-  program = ["bash", "${path.module}/scripts/npm_build.sh"]
-
+resource "null_resource" "build_frontend" {
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/npm_build.sh"
+  }
   depends_on = [
     null_resource.generate_env_file
   ]
@@ -38,7 +39,7 @@ resource "aws_s3_object" "data" {
 
   depends_on = [
     module.frontend,
-    data.external.npm_build
+    null_resource.build_frontend
   ]
 }
 
