@@ -11,7 +11,7 @@ function Root() {
   return (
     <section className="grid grid-cols-1 grid-rows-[auto_auto_1fr] sm:grid-rows-[1fr_auto] gap-10 py-10">
       <div className="flex items-center gap-4">
-        <h1 className="text-primary col-start-1 row-start-1 text-2xl font-bold">
+        <h1 className="text-primary col-start-1 row-start-1 text-2xl font-semibold">
           Alerts in {neighborhood}
         </h1>
         <ReportDrawer />

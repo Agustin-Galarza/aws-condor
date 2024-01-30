@@ -10,7 +10,7 @@ function Layout() {
   return (
     <main className="dark bg-background min-h-screen flex flex-col justify-between items-center">
       <div className="w-full">
-        <nav className="flex h-16 gap-4 justify-between w-full border-b-[1px] border-muted px-5 ">
+        <nav className="flex h-16 gap-4 justify-between items-center w-full border-b-[1px] border-muted px-5 ">
           <button
             onClick={() => navigate("/")}
             className="flex items-center gap-1"
@@ -21,17 +21,16 @@ function Layout() {
             </span>
           </button>
           {token ? (
-            <div className="flex gap-4">
-              <Button
-                size="lg"
-                onClick={() => {
-                  cleanToken();
-                  navigate("/login");
-                }}
-              >
-                Logout
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => {
+                cleanToken();
+                navigate("/login");
+              }}
+            >
+              Logout
+            </Button>
           ) : (
             <div className="flex gap-2 items-center">
               <Button size="lg" onClick={() => navigate("login")}>

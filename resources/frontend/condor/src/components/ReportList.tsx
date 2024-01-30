@@ -26,7 +26,6 @@ function ReportList({ className }: { className: string }) {
                 src={report.url}
                 className="rounded-md w-full"
               />
-              <span className="text-muted-foreground text-sm">{report.id}</span>
             </div>
           ))}
         </CustomMasonry>

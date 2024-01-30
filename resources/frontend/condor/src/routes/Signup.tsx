@@ -24,11 +24,9 @@ const Signup = () => {
 
     UserPool.signUp(email, password, [], [], (err, data) => {
       if (err) {
-        console.log(err);
         setError(err.message);
         return;
       }
-      console.log(data);
       setUser(data!.user);
       setSigned(true);
     });
@@ -36,21 +34,29 @@ const Signup = () => {
 
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Event", confirmationCode);
-    const res = user!.confirmRegistration(
+
+    user!.confirmRegistration(
       confirmationCode,
       false,
-      () => {},
+      (err) => {
+        if (err) {
+          setError("There was a problem while confirming the account");
+          return;
+        } else {
+          navigate("/login");
+        }
+      },
       {}
     );
-    console.log(res);
+  };
 
-    if (!res) {
-      setError("There was a problem while confirming the account");
-      return;
-    }
-
-    navigate("/login");
+  const handleResendConfirmation = () => {
+    user!.resendConfirmationCode((err) => {
+      if (err) {
+        setError("There was a problem while resending the confirmation code");
+        return;
+      }
+    });
   };
 
   return (
@@ -88,15 +94,18 @@ const Signup = () => {
       </Form>
       {error && <p className="text-red-500">{error}</p>}
       {signed ? (
-        <Form onSubmit={handleConfirm} className="flex flex-col gap-4">
+        <Form onSubmit={handleConfirm} className="flex flex-col gap-4 w-full">
           <Label
-            value=""
-            onChange={(e) => setConfirmationCode(e.target.value)}
+            value={confirmationCode}
+            onChange={(val) => setConfirmationCode(val)}
             id="confirmation"
             type="text"
             label="Confirmation code"
           />
           <Button type="submit">Submit</Button>
+          <Button onClick={() => handleResendConfirmation} variant="outline">
+            Resend code
+          </Button>
         </Form>
       ) : (
         <></>

@@ -11,7 +11,10 @@ interface LabelProps {
 
 function Label({ value, onChange, id, type, label }: LabelProps) {
   return (
-    <ShadcnLabel htmlFor={id} className="flex flex-col gap-2 appearance-none">
+    <ShadcnLabel
+      htmlFor={id}
+      className="text-primary flex flex-col gap-2 appearance-none"
+    >
       <span className="text-primary text-sm">{label}</span>
 
       <Input
