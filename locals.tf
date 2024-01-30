@@ -9,6 +9,7 @@ locals {
 
   security_groups_prefix = "${local.name}-security-group"
 
+  alternative_bucket_name = "condor.alternative.abenve.ar"
   frontend_bucket_name  = "condor.abenve.ar"
   www_bucket_name       = "www.condor.abenve.ar"
   frontend_folder       = "./resources/frontend/condor"

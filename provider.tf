@@ -7,14 +7,14 @@ provider "aws" {
   shared_credentials_files = ["~/.aws/credentials"]
   profile                  = "default"
 
-  default_tags {
-    tags = {
-      author  = "Grupo 4"
-      version = "1.0"
-      project = "Condor"
-      year    = "2023"
-    }
-  }
+  # default_tags {
+  #   tags = {
+  #     author  = "Grupo 4"
+  #     version = "1.0"
+  #     project = "Condor"
+  #     year    = "2023"
+  #   }
+  # }
 }
 
 # resource "aws_iam_role" "example_role" {
