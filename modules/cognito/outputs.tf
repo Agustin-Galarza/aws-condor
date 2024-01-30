@@ -1,5 +1,5 @@
 output "id" {
-  value       = aws_cognito_user_pool.userpool.id
+  value       = aws_cognito_user_pool_client.userpool_client.id
   description = "The ID of the Cognito User Pool"
 }
 
@@ -9,6 +9,6 @@ output "arn" {
 }
 
 output "user_pool_client_id" {
-  value       = aws_cognito_user_pool_client.userpool_client.id
+  value       = aws_cognito_user_pool.userpool.id
   description = "The ID of the Cognito User Pool Client"
 }
