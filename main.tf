@@ -4,8 +4,8 @@ resource "null_resource" "generate_env_file" {
     // TODO: Is "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" ok?
     command = <<-EOT
       echo "VITE_API_URL=${module.api_gateway.api_gateway_invoke_url}" > ${local.frontend_folder}/.env ; 
-      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.user_pool_client_id}" >> ${local.frontend_folder}/.env ;
-      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.id}" >> ${local.frontend_folder}/.env ;
+      echo "VITE_COGNITO_USER_POOL_ID=${module.cognito.id}" >> ${local.frontend_folder}/.env ;
+      echo "VITE_COGNITO_CLIENT_ID=${module.cognito.user_pool_client_id}" >> ${local.frontend_folder}/.env ;
       echo "VITE_CLOUDFRONT_URL=${module.cloudfront.cloudfront_domain_name}" >> ${local.frontend_folder}/.env ;
     EOT
   }
@@ -26,7 +26,7 @@ resource "null_resource" "build_frontend" {
     null_resource.generate_env_file
   ]
 
-  
+
 }
 
 resource "aws_s3_object" "data" {

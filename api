@@ -1,0 +1,74 @@
+POST groups/{groupname}/addMember
+ * POST Request
+ * - body: {
+ *
+ * 		username: string  // name of the username to add to this group
+ * }
+ *
+ * - pathParams: {
+ *
+ * 		groupname: string
+ * }
+
+##########################################
+GET groups/{groupname}
+* GET Request:
+* - pathParams: {
+*
+* 		groupname: string  // name of the group
+* }
+
+##########################################
+GET groups/{groupname}/reports
+* GET Request
+* get all reports from a group
+* - pathParams: {
+*
+* 		groupname: string;
+* }
+* - queryParams: {
+*
+* 		username: string|null; // If present return only the reports related to that user
+* }
+
+##########################################
+POST groups
+* POST Request:
+* - body: {
+*
+*    groupName: string // The name of the group to create
+* }
+
+##########################################
+GET reports
+* Request:
+* - queryParams: {
+*
+* 		groupname: string|null // If present, return just the reports from the selected group
+* }
+
+##########################################
+POST reports
+* POST Request:
+* - Body: {
+*
+* 		username: string,
+* 		message: string|null, // The message associated with this report
+* 		imageUrl: string|null, // The URL for the image associated with this report
+* }
+
+##########################################
+POST users
+* POST Request:
+* - body: {
+*
+* 		username: string
+* }
+
+##########################################
+GET users/{username}
+GET Request:
+ * - pathParam: {
+ *
+ * 		username: string;
+ * }

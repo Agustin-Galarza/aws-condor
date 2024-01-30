@@ -1,6 +1,12 @@
 const dynamo = require('./dynamo');
 const response = require('./responses');
 
+/**
+ * GET Request:
+ * @param {*} event
+ * @param {*} context
+ * @param {*} callback
+ */
 exports.handler = function (event, context, callback) {
 	dynamo
 		.getAllGroups()

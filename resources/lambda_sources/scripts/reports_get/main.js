@@ -6,7 +6,7 @@ const request = require('./requests');
  * Request:
  * - queryParams: {
  *
- * 		groupId: string|null // If present, return just the reports from the selected group
+ * 		groupname: string|null // If present, return just the reports from the selected group
  * }
  * @param {*} event
  * @param {*} context
@@ -15,7 +15,7 @@ const request = require('./requests');
  */
 exports.handler = function (event, context, callback) {
 	//const groupId = event['groupId'];
-	const groupId = request.getQueryParams(event)['groupId'];
+	const groupId = request.getQueryParams(event)['groupname'];
 	if (!groupId) {
 		dynamo
 			.getAllReports()

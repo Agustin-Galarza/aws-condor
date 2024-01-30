@@ -3,7 +3,7 @@ const response = require('./responses');
 const request = require('./requests');
 
 /**
- * Request:
+ * POST Request:
  * - Body: {
  *
  * 		username: string,

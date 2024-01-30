@@ -298,7 +298,10 @@ exports.getAllGroups = async () => {
 	const res = await client.send(
 		new QueryCommand({
 			TableName: TABLE_NAME,
-			KeyConditionExpression: `begins_with(${PK}, ${tableGroup('')})`,
+			KeyConditionExpression: `${PK} = :group`,
+			ExpressionAttributeValues: {
+				':group': { S: 'GROUP' },
+			},
 		})
 	);
 	console.log('Get all groups response:', res);
@@ -360,11 +363,11 @@ exports.createReport = async (user, { message, imageUrl }) => {
 	return { message: 'Report created successfully.' };
 };
 
-exports.getReport = async (user, sentAt) => {
+exports.getReport = async (groupname, username, sentAt) => {
 	const keyExpression = `${PK} = :id`;
 	const expressionAttributes = {
 		':id': {
-			S: tableReportId(user.groupId, user.id),
+			S: tableReportId(groupname, username),
 		},
 	};
 	if (sentAt != null) {

@@ -50,6 +50,10 @@ output "cognito_client_id" {
   value       = module.cognito.user_pool_client_id
   description = "Cognito Client ID"
 }
+output "cognito_userpool_id" {
+  value       = module.cognito.user_pool_id
+  description = "Cognito Client ID"
+}
 
 output "lab_role_arn" {
   value = data.aws_iam_role.lab_role.arn
