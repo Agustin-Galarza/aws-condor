@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import CustomMasonry from "./Masonry";
 
-function ReportList() {
+function ReportList({ className }: { className: string }) {
   const reports = useQuery({
     queryKey: ["reports"],
     queryFn: () =>
@@ -11,19 +11,27 @@ function ReportList() {
     refetchOnWindowFocus: false,
   });
   return (
-    <CustomMasonry>
-      {reports.data?.map((report: { id: string; url: string }) => (
-        <div className="w-full flex items-center flex-col" key={report.id}>
-          <img
-            title={report.id}
-            alt={report.id}
-            src={report.url}
-            className="rounded-md w-full"
-          />
-          <span className="text-secondary text-sm">{report.id}</span>
+    <div className={className}>
+      {reports.data?.length === 0 ? (
+        <div className="w-full flex items-center justify-center">
+          <span className="text-secondary text-sm">No hay reportes</span>
         </div>
-      ))}
-    </CustomMasonry>
+      ) : (
+        <CustomMasonry>
+          {reports.data?.map((report: { id: string; url: string }) => (
+            <div className="w-full flex items-center flex-col" key={report.id}>
+              <img
+                title={report.id}
+                alt={report.id}
+                src={report.url}
+                className="rounded-md w-full"
+              />
+              <span className="text-muted-foreground text-sm">{report.id}</span>
+            </div>
+          ))}
+        </CustomMasonry>
+      )}
+    </div>
   );
 }
 

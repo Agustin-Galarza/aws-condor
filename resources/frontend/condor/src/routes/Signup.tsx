@@ -1,9 +1,9 @@
-//@ts-nocheck
 import { useState } from "react";
 import UserPool from "../UserPool.js";
 import { Form, useNavigate } from "react-router-dom";
 import Label from "../components/Label.js";
 import { CognitoUser } from "amazon-cognito-identity-js";
+import { Button } from "@/components/ui/button.js";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -54,9 +54,14 @@ const Signup = () => {
   };
 
   return (
-    <section className="flex flex-col w-full items-center justify-center min-h-[calc(100vh-112px)] gap-10">
-      <h1 className="text-4xl font-bold">Signup</h1>
-      <Form onSubmit={onSubmit} className="flex flex-col gap-4">
+    <section className="flex flex-col w-full mx-auto max-w-sm  items-center justify-center min-h-[calc(100vh-112px)] gap-6">
+      <div className="flex flex-col gap-2 w-full">
+        <h1 className="text-primary text-4xl font-bold">Sign up</h1>
+        <p className="text-muted-foreground text-sm">
+          Create an account to be able to see and provide reports
+        </p>
+      </div>
+      <Form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
         <Label
           value={email}
           onChange={setEmail}
@@ -71,13 +76,11 @@ const Signup = () => {
           type="password"
           label="Password"
         />
-        <Button type="submit" variant="destructive">
-          Signup
-        </Button>
+        <Button type="submit">Sign up with email</Button>
         <div className="w-full flex justify-end">
           <button
             onClick={() => navigate("/login")}
-            className="text-sm text-red-500 "
+            className="text-sm text-blue-500 hover:underline"
           >
             I already have an account
           </button>
@@ -93,9 +96,7 @@ const Signup = () => {
             type="text"
             label="Confirmation code"
           />
-          <Button type="submit" variant="primary">
-            Submit
-          </Button>
+          <Button type="submit">Submit</Button>
         </Form>
       ) : (
         <></>

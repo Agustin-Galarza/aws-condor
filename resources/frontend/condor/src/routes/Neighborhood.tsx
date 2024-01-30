@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label.tsx";
 
 const neighborhoodList = [
   "Quilmes",
@@ -39,28 +40,32 @@ function Neighborhood() {
 
   return (
     <section className="min-h-[calc(100vh-112px)] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="font-bold text-2xl">Select your Neighborhood</h1>
-        <div className="flex items-center gap-2">
-          <Select onValueChange={(value) => setNeighborhoodState(value)}>
-            <SelectTrigger className="w-[250px] text-primary">
-              <SelectValue placeholder="Select your neighborhood" />
-            </SelectTrigger>
-            <SelectContent>
-              {neighborhoodList.map((neighborhood) => (
-                <SelectItem value={neighborhood} key={neighborhood}>
-                  {neighborhood}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            variant="outline"
-            onClick={handleOnClick}
-            className="font-extrabold rounded h-12"
-          >
-            GO
-          </Button>
+      <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-primary font-bold text-2xl">Welcome to Condor</h1>
+          <p className="text-sm text-muted-foreground">
+            Find the newest report on your neighborhood.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label className="text-primary">Choose your neighborhood</Label>
+          <div className="flex items-center gap-2">
+            <Select onValueChange={(value) => setNeighborhoodState(value)}>
+              <SelectTrigger className="w-[250px] text-primary">
+                <SelectValue placeholder="Neighborhood" />
+              </SelectTrigger>
+              <SelectContent>
+                {neighborhoodList.map((neighborhood) => (
+                  <SelectItem value={neighborhood} key={neighborhood}>
+                    {neighborhood}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={handleOnClick} className="font-extrabold rounded ">
+              GO
+            </Button>
+          </div>
         </div>
       </div>
     </section>

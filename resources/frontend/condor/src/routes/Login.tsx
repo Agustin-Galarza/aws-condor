@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useState } from "react";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import UserPool from "../UserPool.js";
@@ -45,30 +44,33 @@ const Login = () => {
   };
 
   return (
-    <section className="flex flex-col w-full items-center justify-center min-h-[calc(100vh-112px)] gap-10">
-      <h1 className="text-4xl font-bold">Login</h1>
-      <Form onSubmit={onSubmit} className="flex flex-col gap-4 ">
+    <section className="flex flex-col w-full items-center justify-center mx-auto max-w-sm min-h-[calc(100vh-112px)] gap-6">
+      <div className="flex flex-col gap-2 w-full">
+        <h1 className="text-primary text-4xl font-bold">Login</h1>
+        <p className="text-muted-foreground text-sm">
+          Log into your account to be able to see and provide reports
+        </p>
+      </div>
+      <Form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
         <Label
-          email={email}
+          value={email}
           onChange={setEmail}
           id="email"
           type="text"
           label="Email"
         />
         <Label
-          email={password}
+          value={password}
           onChange={setPassword}
           id="password"
           type="password"
           label="Password"
         />
-        <Button type="submit" variant="destructive">
-          Login
-        </Button>
+        <Button type="submit">Login with email</Button>
         <div className="w-full flex justify-end">
           <button
             onClick={() => navigate("/signup")}
-            className="text-sm text-red-500 "
+            className="text-sm text-blue-500 hover:underline"
           >
             I do not have an account
           </button>
