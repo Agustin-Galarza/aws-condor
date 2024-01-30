@@ -25,6 +25,8 @@ resource "null_resource" "build_frontend" {
   depends_on = [
     null_resource.generate_env_file
   ]
+
+  
 }
 
 resource "aws_s3_object" "data" {
@@ -215,12 +217,12 @@ module "api_gateway" {
 
   ]
 }
-module "acm" {
-  source      = "./modules/acm"
-  domain_name = local.frontend_bucket_name
-
-  # depends_on = [module.route53]
-}
+# module "acm" {
+#   source      = "./modules/acm"
+#   domain_name = local.frontend_bucket_name
+#   alternative_domain_name = local.alternative_bucket_name
+#   # depends_on = [module.route53]
+# }
 
 module "sns" {
   source  = "terraform-aws-modules/sns/aws"
