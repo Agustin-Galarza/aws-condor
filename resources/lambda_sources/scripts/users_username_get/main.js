@@ -3,7 +3,11 @@ const response = require('./responses');
 const request = require('./requests');
 
 /**
- * Request:
+ * GET Request:
+ * - pathParam: {
+ *
+ * 		username: string;
+ * }
  * @param {*} event
  * @param {*} context
  * @param {*} callback
@@ -11,7 +15,7 @@ const request = require('./requests');
  */
 exports.handler = function (event, context, callback) {
 	//const userId = event['username'];
-	const userId = request.getQueryParams(event)['username'];
+	const userId = request.getPathParams(event)['username'];
 
 	dynamo
 		.findUser(userId)

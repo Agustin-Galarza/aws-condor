@@ -7,7 +7,11 @@ const request = require('./requests');
  * get all reports from a group
  * - pathParams: {
  *
- * 		groupname: string
+ * 		groupname: string;
+ * }
+ * - queryParams: {
+ *
+ * 		username: string|null; // If present return only the reports related to that user
  * }
  * @param {*} event
  * @param {*} context
@@ -16,9 +20,10 @@ const request = require('./requests');
 exports.handler = function (event, context, callback) {
 	//const groupId = event['groupId'];
 	const groupname = request.getPathParams(event)['groupname'];
+	const username = request.getQueryParams(event)['username'];
 
 	dynamo
-		.getAllGroupReports(username)
+		.getAllGroupReports(groupname)
 		.then(reports => {
 			console.log('Ok', res);
 			callback(null, response.ok(res));

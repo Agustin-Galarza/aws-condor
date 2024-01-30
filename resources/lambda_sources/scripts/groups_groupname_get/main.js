@@ -3,10 +3,10 @@ const response = require('./responses');
 const request = require('./requests');
 
 /**
- * Request
- * - queryParams: {
+ * GET Request:
+ * - pathParams: {
  *
- * 		groupId: string  // name of the group
+ * 		groupname: string  // name of the group
  * }
  * @param {*} event
  * @param {*} context
@@ -14,7 +14,7 @@ const request = require('./requests');
  */
 exports.handler = function (event, context, callback) {
 	//const groupId = event['groupId'];
-	const groupId = request.getQueryParams(event)['groupId'];
+	const groupId = request.getPathParams(event)['groupname'];
 
 	dynamo
 		.findGroup(groupId)
