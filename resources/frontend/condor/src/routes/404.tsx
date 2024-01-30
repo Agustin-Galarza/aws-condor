@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 function NotFound() {
@@ -9,12 +10,9 @@ function NotFound() {
         <h1 className="text-[7rem] leading-[8rem] font-bold">404</h1>
         <span className="text-xl">Page not found</span>
       </div>
-      <button
-        onClick={() => navigate("/")}
-        className="px-3 py-2 rounded  bg-red-500 font-extrabold"
-      >
+      <Button onClick={() => navigate("/")} variant="destructive">
         Go Home
-      </button>
+      </Button>
     </div>
   );
 }

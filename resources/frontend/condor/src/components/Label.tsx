@@ -1,23 +1,26 @@
+import { Input } from "@/components/ui/input";
+import { Label as ShadcnLabel } from "@/components/ui/label";
+
 interface LabelProps {
-  email: string;
+  value: string;
   onChange: (value: string) => void;
   id: string;
   type: string;
   label: string;
 }
 
-function Label({ email, onChange, id, type, label }: LabelProps) {
+function Label({ value, onChange, id, type, label }: LabelProps) {
   return (
-    <label htmlFor="email" className="flex flex-col gap-2">
-      <span className="text-zinc-300 text-sm font-bold">{label}</span>
-      <input
-        value={email}
+    <ShadcnLabel htmlFor={id} className="flex flex-col gap-2">
+      <span className="text-primary text-sm">{label}</span>
+
+      <Input
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none bg-transparent border-zinc-600 border-[1px] rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+        value={value}
         id={id}
         type={type}
       />
-    </label>
+    </ShadcnLabel>
   );
 }
 
