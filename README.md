@@ -1,3 +1,7 @@
+### Remember
+
+Run `zip_lambdas.sh` to zip the lambdas before running `terraform apply`.
+
 # aws-condor
 
 The best neighborhood overwatch application. 
