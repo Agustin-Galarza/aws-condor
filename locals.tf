@@ -18,6 +18,7 @@ locals {
   filetypes = {
     "html" = "text/html",
     "css"  = "text/css",
+    "svg"  = "image/svg+xml",
     "js"   = "application/javascript",
     "json" = "application/json",
     "png"  = "image/png",
