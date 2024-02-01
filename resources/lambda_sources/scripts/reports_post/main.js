@@ -18,34 +18,27 @@ const request = require('./requests');
 exports.handler = function (event, context, callback) {
 	// const userId = event['userId'];
 	const query = request.getBody(event);
-	const userId = query['username'];
+	const username = query['username'];
 	const message = query['message'];
 	const imageUrl = query['imageUrl'];
-	if (!userId) {
+	if (!username) {
 		callback(null, response.badRequest('Missing userId'));
 		return;
 	}
 
 	dynamo
-		.findUser(userId)
-		.then(resUser => {
-			console.log('User response', res);
-			if (resUser === null) {
+		.findUser(username)
+		.then(user => {
+			console.log('User response', user);
+			if (user === null) {
 				callback(null, response.notFound('User not found'));
 				return;
 			}
 			// checkear la respuesta
 			// subir la imagen al bucket
-			const imageUrl = 'i am an url';
-
-			const user = {
-				id: dynamo.getPartitionKey(resUser),
-				data: { groupId: dynamo.getStringKey(resUser, 'groupId') },
-			};
-
 			console.log('User built', user);
 			dynamo
-				.createReport(user, imageUrl)
+				.createReport(user, { message, imageUrl })
 				.then(res => {
 					console.log('Report response', res);
 					callback(null, response.ok(res));

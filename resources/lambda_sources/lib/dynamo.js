@@ -8,10 +8,13 @@ const {
 	QueryCommand,
 } = require('@aws-sdk/client-dynamodb'); // CommonJS import
 const client = new DynamoDBClient({ region: 'us-east-1' });
+const crypto = require('crypto');
 
 const TABLE_NAME = 'condor-main';
 const PK = 'PartitionKey';
 const SK = 'SortKey';
+const TYPE = 'Type';
+const TYPE_INDEX_NAME = 'TypeIndex';
 
 const NULL_STRING = 'null';
 
@@ -41,11 +44,27 @@ const parseCollection = (queryResult, itemMapper) => {
 	};
 };
 const getStringKey = (obj, key) => {
+	if (obj[key] == null) return null;
 	const value = obj[key]['S'];
 	return value == NULL_STRING ? null : value;
 };
-const getListKey = (obj, key) => obj[key]['L'];
+const getListKey = (obj, key, objMapper = null) => {
+	if (obj[key] == null) {
+		return null;
+	}
+	const objects = obj[key]['L'];
+	if (objects == null) {
+		return [];
+	}
+	if (objMapper == null) {
+		return objects;
+	}
+	return objects.map(objMapper);
+};
+const getStrListKey = (obj, key) =>
+	getListKey(obj, key, o => (o != null ? o['S'] : null));
 const strToDynamo = str => ({ S: str ?? NULL_STRING });
+const strListToDynamo = list => ({ L: list.map(strToDynamo) });
 const getPartitionKey = obj => getStringKey(obj, PK);
 const getSortKey = obj => getStringKey(obj, SK);
 
@@ -131,35 +150,37 @@ exports.queryItems = async (key, sortPrefix) => {
 };
 
 /**
- * User:
- * 	id: username
- * 	data: {"groupId": S}
+ * user: {
+ * 		username: string;
+ * 		group: string; // group name
+ * }
  */
+const USER_TYPE = 'USER';
+const userPK = username => 'USER#' + username;
+const userSK = username => username;
 const parseUser = dynamoRes =>
 	dynamoRes
 		? {
-				id: getStringKey(dynamoRes, 'id'),
-				groupId: getStringKey(dynamoRes, 'groupId'),
+				username: getStringKey(dynamoRes, 'username'),
+				group: getStringKey(dynamoRes, 'group'),
 		  }
 		: null;
 
-const tableUserId = userId => 'USER#' + userId;
-
-exports.findUser = async userId => {
+exports.findUser = async username => {
 	const res = await client.send(
 		new GetItemCommand({
 			TableName: TABLE_NAME,
 			Key: {
-				[PK]: { S: tableUserId(userId) },
-				[SK]: { S: NULL_STRING },
+				[PK]: strToDynamo(userPK(username)),
+				[SK]: strToDynamo(userSK(username)),
 			},
 		})
 	);
 	return parseUser(_extractItem(res));
 };
 
-exports.addUser = async user => {
-	const existingUser = await exports.findUser(user.id);
+exports.addUser = async username => {
+	const existingUser = await exports.findUser(username);
 	if (existingUser !== null) {
 		return { code: 409, message: 'User already exists.' };
 	}
@@ -168,10 +189,11 @@ exports.addUser = async user => {
 		new PutItemCommand({
 			TableName: TABLE_NAME,
 			Item: {
-				[PK]: { S: tableUserId(user.id) },
-				[SK]: { S: NULL_STRING },
-				id: { S: user.id },
-				groupId: { S: NULL_STRING },
+				[PK]: strToDynamo(userPK(username)),
+				[SK]: strToDynamo(userSK(username)),
+				[TYPE]: strToDynamo(USER_TYPE),
+				username: strToDynamo(username),
+				group: strToDynamo(null),
 			},
 		})
 	);
@@ -180,18 +202,24 @@ exports.addUser = async user => {
 	if (code !== 200) {
 		return { code, message: 'Error. User could not be created' };
 	}
-	return { message: `User ${user.id} created successfully` };
+	return { message: `User ${username} created successfully` };
 };
 
 exports.getAllUsers = async () => {
 	const res = await client.send(
-		new ScanCommand({
+		new QueryCommand({
 			TableName: TABLE_NAME,
-			FilterExpression: `begins_with(${PK}, :id)`,
-			ExpressionAttributeValues: { ':id': { S: tableUserId('') } },
+			IndexName: TYPE_INDEX_NAME,
+			KeyConditionExpression: `#t = :type`,
+			ExpressionAttributeNames: {
+				'#t': TYPE,
+			},
+			ExpressionAttributeValues: {
+				':type': strToDynamo(USER_TYPE),
+			},
 		})
 	);
-	return parseCollection(res);
+	return parseCollection(res, parseUser);
 };
 
 /**
@@ -202,15 +230,16 @@ exports.getAllUsers = async () => {
  * 			"members": string[]
  * 		}
  */
+const GROUP_TYPE = 'GROUP';
+const groupPK = groupname => `GROUP#${groupname}`;
+const groupSK = groupname => groupname;
 const parseGroup = dynamoRes =>
 	dynamoRes
 		? {
 				name: getStringKey(dynamoRes, 'name'),
-				members: getListKey(dynamoRes, 'members'),
+				members: getStrListKey(dynamoRes, 'members'),
 		  }
 		: null;
-
-const tableGroup = groupId => `GROUP#${groupId}`;
 
 exports.createGroup = async groupName => {
 	const existingGroup = await exports.findGroup(groupName);
@@ -222,10 +251,11 @@ exports.createGroup = async groupName => {
 		new PutItemCommand({
 			TableName: TABLE_NAME,
 			Item: {
-				[PK]: { S: tableGroup(groupName) },
-				[SK]: { S: NULL_STRING },
-				name: { S: groupName },
-				members: { L: [] },
+				[PK]: strToDynamo(groupPK(groupName)),
+				[SK]: strToDynamo(groupSK(groupName)),
+				[TYPE]: strToDynamo(GROUP_TYPE),
+				name: strToDynamo(groupName),
+				members: strListToDynamo([]),
 			},
 		})
 	);
@@ -237,13 +267,13 @@ exports.createGroup = async groupName => {
 	return { message: `Group ${groupName} created successfully` };
 };
 
-exports.findGroup = async groupId => {
+exports.findGroup = async groupName => {
 	const res = await client.send(
 		new GetItemCommand({
 			TableName: TABLE_NAME,
-			Item: {
-				[PK]: { S: tableGroup(groupId) },
-				[SK]: { S: NULL_STRING },
+			Key: {
+				[PK]: strToDynamo(groupPK(groupName)),
+				[SK]: strToDynamo(groupSK(groupName)),
 			},
 		})
 	);
@@ -255,15 +285,15 @@ exports.addMember = async (groupname, username) => {
 		new UpdateItemCommand({
 			TableName: TABLE_NAME,
 			Key: {
-				[PK]: strToDynamo(tableGroup(groupname)),
-				[SK]: strToDynamo(null),
+				[PK]: strToDynamo(groupPK(groupname)),
+				[SK]: strToDynamo(groupSK(groupname)),
 			},
-			UpdateExpression: 'SET list_append(#m, :userId)',
+			UpdateExpression: 'SET #m = list_append(#m, :username)',
 			ExpressionAttributeNames: {
 				'#m': 'members',
 			},
 			ExpressionAttributeValues: {
-				':userId': username,
+				':username': strListToDynamo([username]),
 			},
 		})
 	);
@@ -276,13 +306,15 @@ exports.addMember = async (groupname, username) => {
 		new UpdateItemCommand({
 			TableName: TABLE_NAME,
 			Key: {
-				[PK]: strToDynamo(tableUserId(username)),
-				[SK]: strToDynamo(null),
+				[PK]: strToDynamo(userPK(username)),
+				[SK]: strToDynamo(userSK(username)),
 			},
 			UpdateExpression: 'SET #g = :groupname',
 			ExpressionAttributeNames: {
 				'#g': 'group',
-				':groupname': groupname,
+			},
+			ExpressionAttributeValues: {
+				':groupname': strToDynamo(groupname),
 			},
 		})
 	);
@@ -298,9 +330,13 @@ exports.getAllGroups = async () => {
 	const res = await client.send(
 		new QueryCommand({
 			TableName: TABLE_NAME,
-			KeyConditionExpression: `${PK} = :group`,
+			IndexName: TYPE_INDEX_NAME,
+			KeyConditionExpression: `#t = :group`,
+			ExpressionAttributeNames: {
+				'#t': TYPE,
+			},
 			ExpressionAttributeValues: {
-				':group': { S: 'GROUP' },
+				':group': strToDynamo(GROUP_TYPE),
 			},
 		})
 	);
@@ -319,39 +355,52 @@ exports.getAllGroups = async () => {
  * 			"from": S, (username)
  *      }
  */
+const REPORT_TYPE = 'REPORT';
+const reportPK = id => 'REPORT#' + id;
+const reportSK = (groupName = null, userName = null, sentAt = null) => {
+	if (groupName == null) {
+		return '';
+	}
+	if (userName != null) {
+		if (sentAt != null) {
+			return `${groupName}#${userName}#${sentAt}`;
+		}
+		return `${groupName}#${userName}`;
+	}
+	return `${groupName}`;
+};
+
 const parseReport = dynamoRes =>
 	dynamoRes
 		? {
+				id: getStringKey(dynamoRes, 'id'),
 				message: getStringKey(dynamoRes, 'message'),
 				imageURL: getStringKey(dynamoRes, 'imageUrl'),
 				sentAt: getStringKey(dynamoRes, 'sentAt'),
 				from: getStringKey(dynamoRes, 'from'),
+				group: getStringKey(dynamoRes, 'group'),
 		  }
 		: null;
 
-const tableReportId = (groupId, userId) => {
-	if (userId === null) {
-		return `REPORT#${groupId}`;
-	}
-	return `REPORT#${groupId}#${userId}`;
-};
-const tableReportSk = sentAt => `${sentAt}`;
-
 exports.createReport = async (user, { message, imageUrl }) => {
-	if (user?.data?.groupId === null) {
+	if (user?.group === null) {
 		return { code: 400, message: 'User does not have a group.' };
 	}
-	const sentAt = Date.now();
+	const sentAt = new Date().toISOString();
+	const reportId = crypto.randomUUID();
 	const res = await client.send(
 		new PutItemCommand({
 			TableName: TABLE_NAME,
 			Item: {
-				[PK]: tableReportId(user.data.groupId, user.id),
-				[SK]: tableReportSk(sentAt),
+				[PK]: strToDynamo(reportPK(reportId)),
+				[SK]: strToDynamo(reportSK(user.group, user.username, sentAt)),
+				[TYPE]: strToDynamo(REPORT_TYPE),
+				id: strToDynamo(reportId),
 				imageUrl: strToDynamo(imageUrl),
 				message: strToDynamo(message),
 				sentAt: strToDynamo(sentAt),
-				from: strToDynamo(user.id),
+				from: strToDynamo(user.username),
+				group: strToDynamo(user.group),
 			},
 		})
 	);
@@ -360,48 +409,77 @@ exports.createReport = async (user, { message, imageUrl }) => {
 	if (code !== 200) {
 		return { code, message: 'Error. Report could not be created.' };
 	}
-	return { message: 'Report created successfully.' };
+	return { message: 'Report created successfully with id ' + reportId };
 };
 
-exports.getReport = async (groupname, username, sentAt) => {
-	const keyExpression = `${PK} = :id`;
-	const expressionAttributes = {
-		':id': {
-			S: tableReportId(groupname, username),
-		},
-	};
-	if (sentAt != null) {
-		keyExpression += ` and ${SK} = :sentAt`;
-		expressionAttributes[':sentAt'] = {
-			S: sentAt,
-		};
-	}
+exports.getReport = async reportId => {
 	const res = await client.send(
 		new QueryCommand({
 			TableName: TABLE_NAME,
-			KeyConditionExpression: keyExpression,
-			ExpressionAttributeValues: expressionAttributes,
+			KeyConditionExpression: `#pk = :pk`,
+			ExpressionAttributeNames: {
+				'#pk': PK,
+			},
+			ExpressionAttributeValues: {
+				':pk': strToDynamo(reportPK(reportId)),
+			},
 		})
 	);
-	if (res['Count'] === 0 || res['Items'] == undefined) {
-		return null;
+	const reports = parseCollection(res, parseReport);
+	if (reports == null || reports.data == null || reports.count == 0) {
+		return { code: 404, message: 'Report not found' };
 	}
-	if (res['Count'] > 1) {
-		console.log('Multiple answers', res['Items']);
-	}
-	return parseReport(res['Items'][0]);
+	return reports.data[0];
 };
 
-exports.getAllGroupReports = async groupId => {
-	const cmd = {
-		TableName: TABLE_NAME,
-		KeyConditionExpression: `begins_with(${PK}, ${tableReportId(groupId, '')})`,
+exports.getReports = async (groupname, username, sentAt) => {
+	const keyExpression = `#t = :type`;
+	const expressionAttributeNames = {
+		'#t': TYPE,
 	};
-	const res = await client.send(new QueryCommand(cmd));
-	console.log(`Get all reports for group ${groupId} response:`, res);
+	const expressionAttributeValues = {
+		':type': strToDynamo(REPORT_TYPE),
+	};
+	if (groupname != null) {
+		keyExpression += ` and begins_with(#sk, :query)`;
+		expressionAttributeNames['#sk'] = SK;
+		expressionAttributeValues[':query'] = strToDynamo(
+			reportSK(groupname, username, sentAt)
+		);
+	}
+
+	const res = await client.send(
+		new QueryCommand({
+			TableName: TABLE_NAME,
+			IndexName: TYPE_INDEX_NAME,
+			KeyConditionExpression: keyExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		})
+	);
+	return parseCollection(res, parseReport);
+};
+
+exports.getAllGroupReports = async groupname => {
+	const res = await client.send(
+		new QueryCommand({
+			TableName: TABLE_NAME,
+			IndexName: TYPE_INDEX_NAME,
+			KeyConditionExpression: `#t = :type and begins_with(#sk, :groupname)`,
+			ExpressionAttributeNames: {
+				'#sk': SK,
+				'#t': TYPE,
+			},
+			ExpressionAttributeValues: {
+				':type': strToDynamo(REPORT_TYPE),
+				':groupname': strToDynamo(reportSK(groupname)),
+			},
+		})
+	);
+	console.log(`Get all reports for group ${groupname} response:`, res);
 	return parseCollection(res, parseReport);
 };
 
 exports.getAllReports = async () => {
-	return await exports.getAllGroupReports('');
+	return await exports.getAllGroupReports(null);
 };

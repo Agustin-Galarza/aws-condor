@@ -83,5 +83,13 @@ locals {
       zip_name      = "reports_post"
       env_variables = {}
     },
+    {
+      name          = "reports_id_get"
+      http_method   = "GET"
+      path          = "reports/{reportId}"
+      handler       = "main.handler"
+      zip_name      = "reports_id_get"
+      env_variables = {}
+    },
   ]
 }

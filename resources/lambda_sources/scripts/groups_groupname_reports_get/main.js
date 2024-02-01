@@ -23,10 +23,10 @@ exports.handler = function (event, context, callback) {
 	const username = request.getQueryParams(event)['username'];
 
 	dynamo
-		.getAllGroupReports(groupname)
+		.getReports(groupname, username)
 		.then(reports => {
-			console.log('Ok', res);
-			callback(null, response.ok(res));
+			console.log('Ok', reports);
+			callback(null, response.ok(reports));
 		})
 		.catch(err => {
 			console.error('There was an error getting group reports.', err);

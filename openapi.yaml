@@ -158,3 +158,24 @@ paths:
       responses:
         '201':
           description: Report created successfully
+  /reports/{reportId}:
+    get:
+      summary: Retrieve details of a specific report
+      parameters:
+        - in: path
+          name: reportId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                report:
+                  id: '12345' # Replace with the actual report ID
+                  message: 'Report message'
+                  imageURL: 'https://example.com/image.jpg'
+                  sentAt: '2024-01-28T12:00:00Z'
+                  from: 'user1'

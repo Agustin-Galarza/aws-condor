@@ -4,10 +4,8 @@ const request = require('./requests');
 
 /**
  * Request:
- * - queryParams: {
- *
- * 		username: string,
- * 		sentAt: string,
+ * - pathParams: {
+ *		reportId: string
  * }
  * @param {*} event
  * @param {*} context
@@ -16,36 +14,16 @@ const request = require('./requests');
 exports.handler = function (event, context, callback) {
 	//const userId = event['username'];
 	//const sentAt = event['sentAt'];
-	const query = request.getQueryParams(event);
-	const userId = query['username'];
-	const sentAt = query['sentAt'];
+	const reportId = request.getPathParams(event)['reportId'];
 
-	if (userId == undefined) {
-		callback(null, response.badRequest('Username not provided'));
-		return;
-	}
-	if (sentAt == undefined) {
-		callback(null, response.badRequest('SentAt not provided'));
-		return;
-	}
-
-	dynamo.findUser(userId).then(user => {
-		if (user === null) {
-			return { code: 404, message: 'User does not exist.' };
-		}
-		console.log('Found user:', user);
-		dynamo
-			.getReport(user, sentAt)
-			.then(res => {
-				console.log('Ok', res);
-				callback(null, response.ok(res));
-			})
-			.catch(err => {
-				console.log('Err', err);
-				callback(
-					null,
-					response.serverError('There was an error finding group.')
-				);
-			});
-	});
+	dynamo
+		.getReport(reportId)
+		.then(res => {
+			console.log('Ok', res);
+			callback(null, response.ok(res));
+		})
+		.catch(err => {
+			console.log('Err', err);
+			callback(null, response.serverError('There was an error finding group.'));
+		});
 };

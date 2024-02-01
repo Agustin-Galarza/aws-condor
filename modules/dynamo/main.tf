@@ -16,4 +16,18 @@ resource "aws_dynamodb_table" "this" {
     type = var.range_key.type
   }
 
+  attribute {
+    name = "Type"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "TypeIndex"
+    hash_key        = "Type"
+    range_key       = "SortKey"
+    write_capacity  = 10
+    read_capacity   = 10
+    projection_type = "ALL"
+  }
+
 }

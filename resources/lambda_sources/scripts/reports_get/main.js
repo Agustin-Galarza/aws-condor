@@ -15,8 +15,8 @@ const request = require('./requests');
  */
 exports.handler = function (event, context, callback) {
 	//const groupId = event['groupId'];
-	const groupId = request.getQueryParams(event)['groupname'];
-	if (!groupId) {
+	const groupname = request.getQueryParams(event)['groupname'];
+	if (!groupname) {
 		dynamo
 			.getAllReports()
 			.then(res => {
@@ -30,7 +30,7 @@ exports.handler = function (event, context, callback) {
 		return;
 	}
 	dynamo
-		.getAllGroupReports(groupId)
+		.getAllGroupReports(groupname)
 		.then(res => {
 			console.log('Ok', res);
 			callback(null, response.ok(res));

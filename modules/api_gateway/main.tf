@@ -73,6 +73,11 @@ resource "aws_api_gateway_deployment" "this" {
       // reports_post
       aws_api_gateway_method.reports_post.id,
       aws_api_gateway_integration.reports_post.id,
+      // reports_id
+      aws_api_gateway_resource.reports_id.id,
+      // reports_id_get
+      aws_api_gateway_method.reports_id_get.id,
+      aws_api_gateway_integration.reports_id_get.id
     ]))
   }
 
@@ -268,8 +273,7 @@ resource "aws_api_gateway_method" "groups_get" {
   rest_api_id   = aws_api_gateway_rest_api.this.id
   resource_id   = aws_api_gateway_resource.groups.id
   http_method   = "GET"
-  authorization = var.authorizer.type
-  authorizer_id = aws_api_gateway_authorizer.this.id
+  authorization = "NONE"
 
   request_parameters = {
     "method.request.path.proxy" = true,
@@ -365,8 +369,7 @@ resource "aws_api_gateway_method" "groups_groupname_get" {
   rest_api_id   = aws_api_gateway_rest_api.this.id
   resource_id   = aws_api_gateway_resource.groups_groupname.id
   http_method   = "GET"
-  authorization = var.authorizer.type
-  authorizer_id = aws_api_gateway_authorizer.this.id
+  authorization = "NONE"
 
   request_parameters = {
     "method.request.path.proxy" = true,
@@ -612,5 +615,56 @@ resource "aws_api_gateway_integration_response" "reports_post" {
   status_code = aws_api_gateway_method_response.reports_post.status_code
 
   depends_on = [aws_api_gateway_method_response.reports_post, aws_api_gateway_method.reports_post, aws_api_gateway_integration.reports_post]
+}
+
+//// reports/{reportId}
+resource "aws_api_gateway_resource" "reports_id" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.reports.id
+  path_part   = "{reportId}"
+}
+//// GET reports/{reportId}
+resource "aws_api_gateway_method" "reports_id_get" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.reports_id.id
+  http_method   = "GET"
+  authorization = var.authorizer.type
+  authorizer_id = aws_api_gateway_authorizer.this.id
+
+  request_parameters = {
+    "method.request.path.proxy" = true,
+  }
+}
+
+resource "aws_api_gateway_integration" "reports_id_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.reports_id.id
+  http_method = aws_api_gateway_method.reports_id_get.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = module.lambda["reports/{reportId}-GET"].invoke_arn
+}
+
+resource "aws_api_gateway_method_response" "reports_id_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.reports_id.id
+  http_method = aws_api_gateway_method.reports_id_get.http_method
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "reports_id_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.reports_id.id
+  http_method = aws_api_gateway_method_response.reports_id_get.http_method
+
+  status_code = aws_api_gateway_method_response.reports_id_get.status_code
+
+  depends_on = [aws_api_gateway_integration.reports_id_get]
 }
 ///////////////////////////////////////////////////////////////////////////

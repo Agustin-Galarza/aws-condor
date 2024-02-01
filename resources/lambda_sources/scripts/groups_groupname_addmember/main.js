@@ -36,7 +36,7 @@ exports.handler = function (event, context, callback) {
 				callback(null, response.badRequest('User already has a group.'));
 				return;
 			}
-			if (user.name === null) {
+			if (user.username === null) {
 				console.error(
 					'User does not have a name',
 					'user:',
@@ -48,7 +48,7 @@ exports.handler = function (event, context, callback) {
 				return;
 			}
 			dynamo
-				.addMember(groupname, user.name)
+				.addMember(groupname, user.username)
 				.then(res => {
 					console.log('Ok', res);
 					callback(null, response.ok(res));

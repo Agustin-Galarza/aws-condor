@@ -8,15 +8,15 @@ exports.getBody = request => {
 };
 
 exports.getQueryParams = request => {
-	return request['queryStringParameters'];
+	return request['queryStringParameters'] ?? {};
 };
 
 exports.getHeaders = request => {
-	return request['headers'];
+	return request['headers'] ?? {};
 };
 
 exports.getPathParams = request => {
-	return request['pathParameters'];
+	return request['pathParameters'] ?? {};
 };
 
 /**
@@ -33,6 +33,7 @@ exports.getPathParams = request => {
  *
  * GET reports								reports_get
  * POST reports								reports_post
+ * 		GET reports/{reportId}				reports_id_get
  *
  * user: {
  * 		username: string;
@@ -45,9 +46,11 @@ exports.getPathParams = request => {
  * }
  *
  * report: {
+ * 		id: string;
  * 		message: string|'null';
  * 		imageURL: string|'null';
  * 		sentAt: string;
  * 		from: string; // username
+ * 		group: string; // group name
  * }
  */

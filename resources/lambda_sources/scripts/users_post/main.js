@@ -14,15 +14,15 @@ const request = require('./requests');
  * @returns
  */
 exports.handler = function (event, context, callback) {
-	const userId = request.getBody(event)['username'];
+	const username = request.getBody(event)['username'];
 	//const userId = event['userId']
-	if (!userId) {
+	if (!username) {
 		callback(null, response.badRequest('Missing username'));
 		return;
 	}
 
 	dynamo
-		.addUser({ id: userId })
+		.addUser(username)
 		.then(res => {
 			callback(null, response.ok(res));
 		})
