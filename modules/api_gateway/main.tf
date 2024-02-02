@@ -99,6 +99,7 @@ module "lambda" {
     path   = each.value.path
     method = each.value.http_method
   }
+  layers_arns = var.layers_arns
 
   handler = each.value.handler
 
@@ -172,7 +173,6 @@ resource "aws_api_gateway_method" "users_post" {
   http_method   = "POST"
   authorization = var.authorizer.type
   authorizer_id = aws_api_gateway_authorizer.this.id
-
   request_parameters = {
     "method.request.path.proxy" = true,
   }

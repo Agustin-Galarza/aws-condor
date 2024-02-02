@@ -42,3 +42,8 @@ variable "zip_name" {
     description = "The name of the zip file to upload (without the .zip), located in the `resources/lambda_sources` directory"
     type        = string
 }
+
+variable "layers_arns" {
+  description = "A list of arns from the layers to attach to the lambdas"
+  type        = list(string)
+}

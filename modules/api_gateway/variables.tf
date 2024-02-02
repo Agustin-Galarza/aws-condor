@@ -47,3 +47,8 @@ variable "role_arn" {
   description = "Role ARN to use for the lambda functions"
   type        = string
 }
+
+variable "layers_arns" {
+  description = "A list of arns from the layers to attach to the created lambda functions"
+  type        = list(string)
+}

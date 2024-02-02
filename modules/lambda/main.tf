@@ -7,6 +7,7 @@ resource "aws_lambda_function" "index" {
   handler = var.handler
   runtime = var.runtime
 
+  layers = var.layers_arns
   environment {
     variables = var.env_variables
   }
@@ -21,4 +22,6 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${var.apigw_arn}/*/${var.endpoint.method}/${var.endpoint.path}"
+
+  depends_on = [ aws_lambda_function.index ]
 }

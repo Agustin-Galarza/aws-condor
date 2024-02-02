@@ -118,105 +118,47 @@ module "api_gateway" {
   role_arn   = data.aws_iam_role.lab_role.arn
   account_id = data.aws_caller_identity.current.account_id
 
-  methods = [
-    {
-      path = "reports"
-      methods = [
-        {
-          name          = "reports_get"
-          http_method   = "GET",
-          handler       = "main.handler",
-          zip_name      = "reports_get"
-          env_variables = {}
-        },
-        {
-          name          = "reports_post"
-          http_method   = "POST",
-          handler       = "main.handler",
-          zip_name      = "reports_post"
-          env_variables = {}
-        }
-      ]
-    },
-    {
-      path = "groups"
-      methods = [
-        {
-          name          = "groups_get"
-          http_method   = "GET",
-          handler       = "main.handler",
-          zip_name      = "groups_get"
-          env_variables = {}
-        },
-        {
-          name          = "groups_post"
-          http_method   = "POST",
-          handler       = "main.handler",
-          zip_name      = "groups_post"
-          env_variables = {}
-        }
-      ]
-    },
-    {
-      path = "users"
-      methods = [
-        {
-          name          = "users_get"
-          http_method   = "GET",
-          handler       = "main.handler",
-          zip_name      = "users_get"
-          env_variables = {}
-        },
-        {
-          name          = "users_post"
-          http_method   = "POST",
-          handler       = "main.handler",
-          zip_name      = "users_post"
-          env_variables = {}
-        }
-      ]
-    },
-    {
-      path = "users/{username}"
-      methods = [
-        {
-          name          = "users_id_get"
-          http_method   = "GET",
-          handler       = "main.handler",
-          zip_name      = "users_id_get"
-          env_variables = {}
-        },
-        {
-          name          = "users_post"
-          http_method   = "POST",
-          handler       = "main.handler",
-          zip_name      = "users_post"
-          env_variables = {}
-        }
-      ]
-    },
-    {
-      path = "images"
-      methods = [
-        {
-          name          = "images_get"
-          http_method   = "GET",
-          handler       = "main.handler",
-          zip_name      = "images_get"
-          env_variables = {}
-        },
-        {
-          name          = "images_post"
-          http_method   = "POST",
-          handler       = "main.handler",
-          zip_name      = "images_post"
-          env_variables = {}
-        }
-      ]
-    },
+  methods = []
 
+  layers_arns = [
+    aws_lambda_layer_version.dynamo_layer.arn,
+    aws_lambda_layer_version.sns_layer.arn,
+    aws_lambda_layer_version.requests_layer.arn,
+    aws_lambda_layer_version.responses_layer.arn,
   ]
 }
+
+resource "aws_lambda_layer_version" "dynamo_layer" {
+  filename   = "./resources/lambda_sources/dynamo.zip"
+  layer_name = "dynamo"
+
+  compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
+}
+
+resource "aws_lambda_layer_version" "sns_layer" {
+  filename   = "./resources/lambda_sources/sns.zip"
+  layer_name = "sns"
+
+  compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
+}
+
+resource "aws_lambda_layer_version" "requests_layer" {
+  filename   = "./resources/lambda_sources/requests.zip"
+  layer_name = "requests"
+
+  compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
+}
+
+resource "aws_lambda_layer_version" "responses_layer" {
+  filename   = "./resources/lambda_sources/responses.zip"
+  layer_name = "responses"
+
+  compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
+}
+
+
+
+
 # module "acm" {
 #   source      = "./modules/acm"
 #   domain_name = local.frontend_bucket_name

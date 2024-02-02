@@ -225,7 +225,7 @@ exports.updateUser = async (username, { email, group, subscriptionArn }) => {
 	}
 	if (group !== undefined) {
 		if (needsAndOp) {
-			updateExpression += ', ';
+			updateExpression += ' and';
 		}
 		updateExpression += ' #group = :group';
 		expressionAttributeNames['#group'] = 'group';
@@ -234,7 +234,7 @@ exports.updateUser = async (username, { email, group, subscriptionArn }) => {
 	}
 	if (subscriptionArn !== undefined) {
 		if (needsAndOp) {
-			updateExpression += ', ';
+			updateExpression += ' and';
 		}
 		updateExpression += ' #subscriptionArn = :subscriptionArn';
 		expressionAttributeNames['#subscriptionArn'] = 'subscriptionArn';
@@ -304,7 +304,7 @@ const parseGroup = dynamoRes =>
 		? {
 				name: getStringKey(dynamoRes, 'name'),
 				members: getStrListKey(dynamoRes, 'members'),
-				topicArn: getStringKey(dynamoRes, 'topicArn'),
+				topicArn: getStrListKey(dynamoRes, 'topicArn'),
 		  }
 		: null;
 
@@ -381,7 +381,7 @@ exports.addMember = async (groupname, username, subscriptionArn) => {
 				[PK]: strToDynamo(userPK(username)),
 				[SK]: strToDynamo(userSK(username)),
 			},
-			UpdateExpression: 'SET #g = :groupname, #t = :subscriptionArn',
+			UpdateExpression: 'SET #g = :groupname and #t = :subscriptionArn',
 			ExpressionAttributeNames: {
 				'#g': 'group',
 				'#t': 'subscriptionArn',
@@ -436,7 +436,7 @@ exports.removeMember = async (groupname, username) => {
 				[PK]: strToDynamo(userPK(username)),
 				[SK]: strToDynamo(userSK(username)),
 			},
-			UpdateExpression: 'SET #g = :null, #t = :null',
+			UpdateExpression: 'SET #g = :null and #t = :null',
 			ExpressionAttributeNames: {
 				'#g': 'group',
 				'#t': 'subscriptionArn',
@@ -455,6 +455,10 @@ exports.removeMember = async (groupname, username) => {
 };
 
 exports.getAllGroups = async () => {
+	return {
+		count: -1,
+		data: []
+	};
 	const res = await client.send(
 		new QueryCommand({
 			TableName: TABLE_NAME,

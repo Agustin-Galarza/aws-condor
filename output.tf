@@ -46,11 +46,11 @@ output "sns" {
   description = "SNS"
 }
 
-output "cognito_client_id" {
+output "zz_cognito_client_id" {
   value       = module.cognito.user_pool_client_id
   description = "Cognito Client ID"
 }
-output "cognito_userpool_id" {
+output "zz_cognito_userpool_id" {
   value       = module.cognito.user_pool_id
   description = "Cognito Client ID"
 }
@@ -63,7 +63,7 @@ output "application_security_group_id" {
   value = module.application_security_group.id
 }
 
-output "cloudfront_domain_name" {
+output "zz_cloudfront_domain_name" {
   value = module.cloudfront.cloudfront_domain_name
 }
 
