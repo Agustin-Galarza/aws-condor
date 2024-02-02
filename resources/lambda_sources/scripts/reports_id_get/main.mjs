@@ -21,20 +21,3 @@ export const handler = async (event, context) => {
 		return response.serverError('There was an error finding report.');
 	}
 };
-
-exports.handler = function (event, context, callback) {
-	//const userId = event['username'];
-	//const sentAt = event['sentAt'];
-	const reportId = request.getPathParams(event)['reportId'];
-
-	dynamo
-		.getReport(reportId)
-		.then(res => {
-			console.log('Ok', res);
-			callback(null, response.ok(res));
-		})
-		.catch(err => {
-			console.log('Err', err);
-			callback(null, response.serverError('There was an error finding group.'));
-		});
-};

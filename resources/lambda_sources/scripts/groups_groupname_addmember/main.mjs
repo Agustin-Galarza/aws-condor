@@ -1,7 +1,7 @@
 import * as dynamo from '/opt/nodejs/dynamo.js';
 import * as response from '/opt/nodejs/responses.js';
 import * as request from '/opt/nodejs/requests.js';
-import * as sns from '/opt/nodejs/sns.js';
+import * as sns from '/opt/nodejs/sns.mjs';
 
 /**
  * POST Request

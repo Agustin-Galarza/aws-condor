@@ -14,11 +14,26 @@ paths:
               properties:
                 username:
                   type: string
+                email:
+                  type: string
+                group:
+                  type: string
+                  nullable: true
               required:
                 - username
+                - email
       responses:
         '201':
           description: User created successfully
+    get:
+      summary: Retrieve a collection of users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCollection'
 
   /users/{username}:
     get:
@@ -32,8 +47,21 @@ paths:
       responses:
         '200':
           description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
 
   /groups:
+    get:
+      summary: Retrieve a collection of groups
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupCollection'
     post:
       summary: Create a new group
       requestBody:
@@ -62,7 +90,33 @@ paths:
       responses:
         '200':
           description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+    post:
+      summary: Add a member to a group
+      parameters:
+        - in: path
+          name: groupname
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '200':
+          description: Member added successfully
 
+  /groups/{groupname}/addMember:
     post:
       summary: Add a member to a group
       parameters:
@@ -102,28 +156,11 @@ paths:
       responses:
         '200':
           description: Successful response
-  /groups/{groupname}/addMember:
-    post:
-      summary: Add a member to a group
-      parameters:
-        - in: path
-          name: groupname
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-              required:
-                - username
-      responses:
-        '200':
-          description: Member added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCollection'
+
   /reports:
     get:
       summary: Retrieve a list of reports
@@ -136,7 +173,10 @@ paths:
       responses:
         '200':
           description: Successful response
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCollection'
     post:
       summary: Create a new report
       requestBody:
@@ -150,7 +190,7 @@ paths:
                 message:
                   type: string
                   nullable: true
-                imageURL:
+                imageId:
                   type: string
                   nullable: true
               required:
@@ -158,6 +198,7 @@ paths:
       responses:
         '201':
           description: Report created successfully
+
   /reports/{reportId}:
     get:
       summary: Retrieve details of a specific report
@@ -172,10 +213,118 @@ paths:
           description: Successful response
           content:
             application/json:
-              example:
-                report:
-                  id: '12345' # Replace with the actual report ID
-                  message: 'Report message'
-                  imageURL: 'https://example.com/image.jpg'
-                  sentAt: '2024-01-28T12:00:00Z'
-                  from: 'user1'
+              schema:
+                $ref: '#/components/schemas/Report'
+
+  /images/uploadLink:
+    get:
+      summary: Retrieve an upload link for an image
+      parameters:
+        - in: query
+          name: mimeType
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Upload link generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadLink'
+
+  /images/{imageId}/downloadLink:
+    get:
+      summary: Retrieve a download link for an image
+      parameters:
+        - in: path
+          name: imageId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Download link generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageDownloadLink'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        group:
+          type: string
+    Group:
+      type: object
+      properties:
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            type: string
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+          nullable: true
+        imageId:
+          type: string
+          nullable: true
+        sentAt:
+          type: string
+        from:
+          type: string
+        group:
+          type: string
+    UserCollection:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    GroupCollection:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+    ReportCollection:
+      type: object
+      properties:
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+    ImageUploadLink:
+      type: object
+      properties:
+        url:
+          type: string
+        imageId:
+          type: string
+        expiresInSeconds:
+          type: integer
+    ImageDownloadLink:
+      type: object
+      properties:
+        url:
+          type: string
+        expiresInSeconds:
+          type: integer

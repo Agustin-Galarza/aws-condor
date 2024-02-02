@@ -667,4 +667,117 @@ resource "aws_api_gateway_integration_response" "reports_id_get" {
 
   depends_on = [aws_api_gateway_integration.reports_id_get]
 }
-///////////////////////////////////////////////////////////////////////////
+
+//// images
+resource "aws_api_gateway_resource" "images" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_rest_api.this.root_resource_id
+  path_part   = "images"
+}
+
+//// images/uploadLink
+resource "aws_api_gateway_resource" "images_uploadlink" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.images.id
+  path_part   = "uploadLink"
+}
+
+//// GET images/uploadLink
+resource "aws_api_gateway_method" "images_uploadlink_get" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.images_uploadlink.id
+  http_method   = "GET"
+  authorization = "NONE"
+
+  request_parameters = {
+    "method.request.path.proxy" = true,
+  }
+}
+
+resource "aws_api_gateway_integration" "images_uploadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_uploadlink.id
+  http_method = aws_api_gateway_method.images_uploadlink_get.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = module.lambda["images/uploadLink-GET"].invoke_arn
+}
+
+resource "aws_api_gateway_method_response" "images_uploadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_uploadlink.id
+  http_method = aws_api_gateway_method.images_uploadlink_get.http_method
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "images_uploadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_uploadlink.id
+  http_method = aws_api_gateway_method_response.images_uploadlink_get.http_method
+
+  status_code = aws_api_gateway_method_response.images_uploadlink_get.status_code
+
+  depends_on = [aws_api_gateway_integration.images_uploadlink_get]
+}
+
+//// images/{imageId}
+resource "aws_api_gateway_resource" "images_imageid" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.images.id
+  path_part   = "{imageId}"
+}
+//// images/{imageId}/downloadLink
+resource "aws_api_gateway_resource" "images_imageid_downloadlink" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.images_imageid.id
+  path_part   = "downloadLink"
+}
+//// GET images/{imageId}/downloadLink
+resource "aws_api_gateway_method" "images_imageid_downloadlink_get" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.images_imageid_downloadlink.id
+  http_method   = "GET"
+  authorization = var.authorizer.type
+  authorizer_id = aws_api_gateway_authorizer.this.id
+
+  request_parameters = {
+    "method.request.path.proxy" = true,
+  }
+}
+resource "aws_api_gateway_integration" "images_imageid_downloadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_imageid_downloadlink.id
+  http_method = aws_api_gateway_method.images_imageid_downloadlink_get.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = module.lambda["images/{imageId}/downloadLink-GET"].invoke_arn
+}
+
+resource "aws_api_gateway_method_response" "images_imageid_downloadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_imageid_downloadlink.id
+  http_method = aws_api_gateway_method.images_imageid_downloadlink_get.http_method
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "images_imageid_downloadlink_get" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  resource_id = aws_api_gateway_resource.images_imageid_downloadlink.id
+  http_method = aws_api_gateway_method_response.images_imageid_downloadlink_get.http_method
+
+  status_code = aws_api_gateway_method_response.images_imageid_downloadlink_get.status_code
+
+  depends_on = [aws_api_gateway_integration.images_imageid_downloadlink_get]
+}

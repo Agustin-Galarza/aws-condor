@@ -91,5 +91,21 @@ locals {
       zip_name      = "reports_id_get"
       env_variables = {}
     },
+    {
+      name          = "images_uploadlink_get"
+      http_method   = "GET"
+      path          = "images/uploadLink"
+      handler       = "main.handler"
+      zip_name      = "images_uploadlink_get"
+      env_variables = {}
+    },
+    {
+      name          = "images_imageid_downloadlink_get"
+      http_method   = "GET"
+      path          = "images/{imageId}/downloadLink"
+      handler       = "main.handler"
+      zip_name      = "images_imageid_downloadlink_get"
+      env_variables = {}
+    },
   ]
 }

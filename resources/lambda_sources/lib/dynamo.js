@@ -477,17 +477,19 @@ exports.getAllGroups = async () => {
  *      id: groupId, userId
  *      scan: sentAt
  *      data: {
- *          "imageUrl": S,
- * 			"message": S,
- * 			"sentAt": S,
- * 			"from": S, (username)
+ * 			"id": string,
+ * 			"imageId": string|'null',
+ * 			"message": string|'null',
+ * 			"sentAt": string,
+ * 			"from": string, (username)
+ * 			"group": string	(groupname)
  *      }
  */
 const REPORT_TYPE = 'REPORT';
 const reportPK = id => 'REPORT#' + id;
 const reportSK = (groupName = null, userName = null, sentAt = null) => {
 	if (groupName == null) {
-		return '';
+		return NULL_STRING;
 	}
 	if (userName != null) {
 		if (sentAt != null) {
@@ -503,14 +505,14 @@ const parseReport = dynamoRes =>
 		? {
 				id: getStringKey(dynamoRes, 'id'),
 				message: getStringKey(dynamoRes, 'message'),
-				imageURL: getStringKey(dynamoRes, 'imageUrl'),
+				imageId: getStringKey(dynamoRes, 'imageId'),
 				sentAt: getStringKey(dynamoRes, 'sentAt'),
 				from: getStringKey(dynamoRes, 'from'),
 				group: getStringKey(dynamoRes, 'group'),
 		  }
 		: null;
 
-exports.createReport = async (user, { message, imageUrl }) => {
+exports.createReport = async (user, { message, imageId }) => {
 	if (user?.group === null) {
 		return { code: 400, message: 'User does not have a group.' };
 	}
@@ -524,7 +526,7 @@ exports.createReport = async (user, { message, imageUrl }) => {
 				[SK]: strToDynamo(reportSK(user.group, user.username, sentAt)),
 				[TYPE]: strToDynamo(REPORT_TYPE),
 				id: strToDynamo(reportId),
-				imageUrl: strToDynamo(imageUrl),
+				imageId: strToDynamo(imageId),
 				message: strToDynamo(message),
 				sentAt: strToDynamo(sentAt),
 				from: strToDynamo(user.username),
@@ -610,4 +612,153 @@ exports.getAllGroupReports = async groupname => {
 
 exports.getAllReports = async () => {
 	return await exports.getAllGroupReports(null);
+};
+
+/**
+ *  Image
+ *      PK: id
+ *      SK: groupname, username
+ *      data: {
+ *          "id": string,
+ * 			"mimeType": string|'null',
+ * 			"user": string|'null',
+ * 			"group": string|'null'
+ *      }
+ */
+const IMAGE_TYPE = 'IMAGE';
+const imagePK = id => 'IMAGE#' + id;
+const imageSK = (groupName = null, userName = null) => {
+	if (groupName == null) {
+		return NULL_STRING;
+	}
+	if (userName != null) {
+		return `${groupName}#${userName}`;
+	}
+	return `${groupName}`;
+};
+
+const parseImage = dynamoRes =>
+	dynamoRes
+		? {
+				id: getStringKey(dynamoRes, 'id'),
+				mimeType: getStringKey(dynamoRes, 'mimeType'),
+				user: getStringKey(dynamoRes, 'user'),
+				group: getStringKey(dynamoRes, 'group'),
+		  }
+		: null;
+
+exports.uploadImage = async (
+	mimeType = 'application/octet-stream',
+	user = null,
+	group = null
+) => {
+	const id = crypto.randomUUID();
+	const res = await client.send(
+		new PutItemCommand({
+			TableName: TABLE_NAME,
+			Item: {
+				[PK]: strToDynamo(imagePK(id)),
+				[SK]: strToDynamo(imageSK(group, user)),
+				[TYPE]: strToDynamo(IMAGE_TYPE),
+				id: strToDynamo(id),
+				mimeType: strToDynamo(mimeType),
+				user: strToDynamo(user),
+				group: strToDynamo(group),
+			},
+		})
+	);
+	console.log('Image PutItem response:', res);
+	const code = _getStatusCode(res);
+	if (code !== 200) {
+		console.error('Error uploading image', res);
+		return null;
+	}
+	return id;
+};
+
+exports.getImage = async imageId => {
+	const res = await client.send(
+		new QueryCommand({
+			TableName: TABLE_NAME,
+			KeyConditionExpression: `#pk = :pk`,
+			ExpressionAttributeNames: {
+				'#pk': PK,
+			},
+			ExpressionAttributeValues: {
+				':pk': strToDynamo(imagePK(imageId)),
+			},
+		})
+	);
+	console.log('Get image response:', res);
+	const code = _getStatusCode(res);
+	if (code !== 200) {
+		return null;
+	}
+	const images = parseCollection(res, parseImage);
+	if (images == null || images.data == null || images.count == 0) {
+		return null;
+	}
+	return images.data[0];
+};
+
+exports.updateImage = async (
+	imageId,
+	currentUser,
+	currentGroup,
+	{ mimeType, username, groupname }
+) => {
+	let updateExpression = 'SET';
+	let needsAndOp = false;
+	const expressionAttributeNames = {};
+	const expressionAttributeValues = {};
+	if (mimeType !== undefined) {
+		if (mimeType === null) {
+			return { code: 400, message: 'Mime type cannot be null' };
+		}
+		updateExpression += ' #m = :mimeType';
+		expressionAttributeNames['#m'] = 'mimeType';
+		expressionAttributeValues[':mimeType'] = strToDynamo(mimeType);
+		needsAndOp = true;
+	}
+	if (username !== undefined) {
+		if (needsAndOp) {
+			updateExpression += ', ';
+		}
+		updateExpression += ' #u = :username';
+		expressionAttributeNames['#u'] = 'user';
+		expressionAttributeValues[':username'] = strToDynamo(username);
+		needsAndOp = true;
+	}
+	if (groupname !== undefined) {
+		if (needsAndOp) {
+			updateExpression += ', ';
+		}
+		updateExpression += ' #g = :groupname';
+		expressionAttributeNames['#g'] = 'group';
+		expressionAttributeValues[':groupname'] = strToDynamo(groupname);
+		needsAndOp = true;
+	}
+
+	if (updateExpression === 'SET') {
+		return { message: 'Nothing to update' };
+	}
+
+	const res = await client.send(
+		new UpdateItemCommand({
+			TableName: TABLE_NAME,
+			Key: {
+				[PK]: strToDynamo(imagePK(imageId)),
+				[SK]: strToDynamo(imageSK(currentGroup, currentUser)),
+			},
+			UpdateExpression: updateExpression,
+			ExpressionAttributeNames: expressionAttributeNames,
+			ExpressionAttributeValues: expressionAttributeValues,
+		})
+	);
+	console.log('UpdateItem response:', res);
+	const code = _getStatusCode(res);
+	if (code !== 200) {
+		return { code, message: 'Error. Image could not be updated' };
+	}
+	return { message: `Image ${imageId} updated successfully` };
 };

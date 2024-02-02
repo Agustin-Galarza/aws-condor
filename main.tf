@@ -125,6 +125,7 @@ module "api_gateway" {
     aws_lambda_layer_version.sns_layer.arn,
     aws_lambda_layer_version.requests_layer.arn,
     aws_lambda_layer_version.responses_layer.arn,
+    aws_lambda_layer_version.s3_layer.arn,
   ]
 }
 
@@ -152,6 +153,13 @@ resource "aws_lambda_layer_version" "requests_layer" {
 resource "aws_lambda_layer_version" "responses_layer" {
   filename   = "./resources/lambda_sources/responses.zip"
   layer_name = "responses"
+
+  compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
+}
+
+resource "aws_lambda_layer_version" "s3_layer" {
+  filename   = "./resources/lambda_sources/s3.zip"
+  layer_name = "s3"
 
   compatible_runtimes = ["nodejs16.x", "nodejs18.x"]
 }
@@ -243,6 +251,34 @@ module "vpc_endpoints" {
   }
   depends_on = []
 
+}
+
+module "files_bucket" {
+
+  force_destroy = true
+  source        = "terraform-aws-modules/s3-bucket/aws"
+  bucket_prefix = "files-"
+  acl = "private"
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  cors_rule = [{
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST", "DELETE", "HEAD"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+]
 }
 
 module "application_security_group" {

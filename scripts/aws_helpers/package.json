@@ -1,0 +1,23 @@
+{
+	"name": "scripts",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"main": "bootstrap.mjs",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@aws-sdk/client-cognito-identity-provider": "^3.505.0",
+		"@aws-sdk/client-dynamodb": "^3.503.1",
+		"@aws-sdk/client-s3": "^3.504.0",
+		"@aws-sdk/client-sns": "^3.504.0",
+		"@aws-sdk/s3-request-presigner": "^3.504.0",
+		"aws-sdk": "^2.1521.0",
+		"axios": "^1.6.7",
+		"node-fetch": "^3.3.2"
+	}
+}
