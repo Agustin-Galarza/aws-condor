@@ -1,4 +1,4 @@
-import * as dynamo from '/opt/nodejs/dynamo.js';
+import * as dynamo from '/opt/nodejs/dynamo.mjs';
 import * as response from '/opt/nodejs/responses.js';
 import * as request from '/opt/nodejs/requests.js';
 import * as s3 from '/opt/nodejs/s3.mjs';
