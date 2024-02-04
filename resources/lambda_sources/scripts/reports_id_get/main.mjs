@@ -1,6 +1,6 @@
 import * as dynamo from '/opt/nodejs/dynamo.mjs';
-import * as response from '/opt/nodejs/responses.js';
-import * as request from '/opt/nodejs/requests.js';
+import * as response from '/opt/nodejs/responses.mjs';
+import * as request from '/opt/nodejs/requests.mjs';
 /**
  * Request:
  * - pathParams: {

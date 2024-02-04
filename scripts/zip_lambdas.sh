@@ -8,8 +8,13 @@ find "$TARGET_DIR" -maxdepth 1 -type f -name "*.zip" | xargs rm
 for subdir in "$LAMBDA_SRC_DIR"/*/; do
     subdirname=$(basename "$subdir")
     
+    target_abs=$(realpath "${TARGET_DIR}")
+
     # find "$LAMBDA_LIB_DIR" -maxdepth 1 -type f -name "*.js" | xargs -I {} zip -j "$TARGET_DIR/$subdirname.zip" {} 
-    zip -j "$TARGET_DIR/$subdirname.zip" "$subdir"*
+    (
+        cd "$subdir"; 
+        zip "$target_abs/$subdirname.zip" -r "./"*
+        )
 done
 
 # Iterate through each JS, MJS, and CJS file in the directory

@@ -4,27 +4,6 @@ info:
   version: 1.0.0
 paths:
   /users:
-    post:
-      summary: Create a new user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                email:
-                  type: string
-                group:
-                  type: string
-                  nullable: true
-              required:
-                - username
-                - email
-      responses:
-        '201':
-          description: User created successfully
     get:
       summary: Retrieve a collection of users
       responses:
@@ -34,13 +13,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserCollection'
+    post:
+      summary: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                group:
+                  type: string
+                  nullable: true
+              required:
+                - email
+      responses:
+        '201':
+          description: User created successfully. Returns the Id of the created user.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
 
-  /users/{username}:
+  /users/{id}:
     get:
-      summary: Retrieve details of a specific user
+      summary: Retrieve details of a specific user by ID
       parameters:
         - in: path
-          name: username
+          name: id
           required: true
           schema:
             type: string
@@ -70,10 +72,10 @@ paths:
             schema:
               type: object
               properties:
-                groupName:
+                groupname:
                   type: string
               required:
-                - groupName
+                - groupname
       responses:
         '201':
           description: Group created successfully
@@ -93,7 +95,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Group'
+                $ref: '#/components/schemas/GroupCollection'
     post:
       summary: Add a member to a group
       parameters:
@@ -108,10 +110,10 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
               required:
-                - username
+                - email
       responses:
         '200':
           description: Member added successfully
@@ -131,10 +133,10 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
               required:
-                - username
+                - email
       responses:
         '200':
           description: Member added successfully
@@ -149,7 +151,7 @@ paths:
           schema:
             type: string
         - in: query
-          name: username
+          name: email
           schema:
             type: string
             nullable: true
@@ -181,23 +183,29 @@ paths:
       summary: Create a new report
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
-                username:
+                user:
                   type: string
                 message:
                   type: string
                   nullable: true
-                imageId:
+                image:
                   type: string
+                  format: binary
                   nullable: true
               required:
-                - username
+                - user
       responses:
         '201':
-          description: Report created successfully
+          description: Report created successfully. Returns the id of the report.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
 
   /reports/{reportId}:
     get:
@@ -216,49 +224,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/Report'
 
-  /images/uploadLink:
+  /images/{id}:
     get:
-      summary: Retrieve an upload link for an image
-      parameters:
-        - in: query
-          name: mimeType
-          schema:
-            type: string
-            nullable: true
-      responses:
-        '200':
-          description: Upload link generated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImageUploadLink'
-
-  /images/{imageId}/downloadLink:
-    get:
-      summary: Retrieve a download link for an image
+      summary: Retrieve binary data for an image
       parameters:
         - in: path
-          name: imageId
+          name: id
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Download link generated successfully
+          description: Successful response
           content:
-            application/json:
+            image/*:
               schema:
-                $ref: '#/components/schemas/ImageDownloadLink'
+                type: string
+                format: binary
 
 components:
   schemas:
     User:
       type: object
       properties:
-        username:
+        id:
+          type: string
+        email:
           type: string
         group:
           type: string
+          nullable: true
     Group:
       type: object
       properties:
@@ -294,6 +289,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
+        paginationKey:
+          type: string
+          nullable: true
     GroupCollection:
       type: object
       properties:
@@ -303,6 +301,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Group'
+        paginationKey:
+          type: string
+          nullable: true
     ReportCollection:
       type: object
       properties:
@@ -312,19 +313,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Report'
-    ImageUploadLink:
-      type: object
-      properties:
-        url:
+        paginationKey:
           type: string
-        imageId:
-          type: string
-        expiresInSeconds:
-          type: integer
-    ImageDownloadLink:
-      type: object
-      properties:
-        url:
-          type: string
-        expiresInSeconds:
-          type: integer
+          nullable: true

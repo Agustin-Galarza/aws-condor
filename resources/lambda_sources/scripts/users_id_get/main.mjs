@@ -1,12 +1,12 @@
 import * as dynamo from '/opt/nodejs/dynamo.mjs';
-import * as response from '/opt/nodejs/responses.js';
-import * as request from '/opt/nodejs/requests.js';
+import * as response from '/opt/nodejs/responses.mjs';
+import * as request from '/opt/nodejs/requests.mjs';
 
 /**
  * GET Request:
  * - pathParam: {
  *
- * 		username: string;
+ * 		id: string;
  * }
  * @param {*} event
  * @param {*} context
@@ -14,10 +14,11 @@ import * as request from '/opt/nodejs/requests.js';
  * @returns
  */
 export const handler = async (event, context) => {
-	const username = request.getPathParams(event)['username'];
+	const id = request.getPathParams(event)['id'];
 
 	try {
-		const res = await dynamo.findUser(username);
+		const res = await dynamo.findUser(request.parseUserId(id));
+		if (res === null) return response.notFound('User not found');
 		return response.ok(response.userDto(res));
 	} catch (err) {
 		console.log('Err', err);

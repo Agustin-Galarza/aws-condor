@@ -1,13 +1,11 @@
 import * as dynamo from '/opt/nodejs/dynamo.mjs';
-import * as response from '/opt/nodejs/responses.js';
-import * as request from '/opt/nodejs/requests.js';
+import * as response from '/opt/nodejs/responses.mjs';
+import * as request from '/opt/nodejs/requests.mjs';
 import * as sns from '/opt/nodejs/sns.mjs';
 
 /**
  * Request:
  * - body: {
- *
- * 		username: string;
  * 		email: string;
  * 		group: string|null; // The name of the group to add the user to
  * }
@@ -17,18 +15,15 @@ import * as sns from '/opt/nodejs/sns.mjs';
  * @returns
  */
 export const handler = async (event, context) => {
-	const { username, email, group: groupname } = request.getBody(event);
-	if (!username) {
-		return response.badRequest('Missing username');
-	}
+	const { email, group: groupname } = request.getBody(event);
 	if (!email) {
 		return response.badRequest('Missing email');
 	}
 
 	try {
-		const res = await dynamo.addUser(username, email);
-		if (res.code != 200) {
-			return response.serverError(res);
+		const res = await dynamo.createUser(email);
+		if (!res.success) {
+			return response.serverError(res.message);
 		}
 
 		if (groupname != null) {
@@ -43,15 +38,15 @@ export const handler = async (event, context) => {
 			if (subscriptionArn === null) {
 				console.error(
 					'Error while subscribing user to group',
-					username,
+					email,
 					groupname
 				);
 				return response.serverError('There was an error adding user.');
 			}
-			await dynamo.addMember(groupname, username, subscriptionArn);
+			await dynamo.addMember(groupname, email, subscriptionArn);
 		}
 
-		return response.ok(res);
+		return response.ok(btoa(email));
 	} catch (err) {
 		return response.serverError(err);
 	}

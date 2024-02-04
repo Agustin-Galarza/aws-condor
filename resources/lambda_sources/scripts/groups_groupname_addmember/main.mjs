@@ -1,13 +1,13 @@
 import * as dynamo from '/opt/nodejs/dynamo.mjs';
-import * as response from '/opt/nodejs/responses.js';
-import * as request from '/opt/nodejs/requests.js';
+import * as response from '/opt/nodejs/responses.mjs';
+import * as request from '/opt/nodejs/requests.mjs';
 import * as sns from '/opt/nodejs/sns.mjs';
 
 /**
  * POST Request
  * - body: {
  *
- * 		username: string  // name of the username to add to this group
+ * 		email: string  // email of the user to add to this group
  * }
  *
  * - pathParams: {
@@ -19,10 +19,10 @@ import * as sns from '/opt/nodejs/sns.mjs';
  * @param {*} callback
  */
 export const handler = async (event, context) => {
-	const groupname = request.getPathParams(event)['groupname'];
-	const username = request.getBody(event)['username'];
-	if (username == undefined) {
-		return response.badRequest('username not provided.');
+	const { groupname } = request.getPathParams(event);
+	const { email } = request.getBody(event);
+	if (email == undefined) {
+		return response.badRequest('email not provided.');
 	}
 	try {
 		const group = await dynamo.findGroup(groupname);
@@ -33,7 +33,7 @@ export const handler = async (event, context) => {
 			console.error('Group does not have a topicArn', group);
 			return response.serverError('Cannot add members to this group.');
 		}
-		const user = await dynamo.findUser(username);
+		const user = await dynamo.findUser(email);
 		if (user === null) {
 			return response.notFound('User not found');
 		}
@@ -52,11 +52,7 @@ export const handler = async (event, context) => {
 			return response.serverError('There was an error adding user.');
 		}
 
-		const res = await dynamo.addMember(
-			groupname,
-			user.username,
-			subscriptionArn
-		);
+		const res = await dynamo.addMember(groupname, user.email, subscriptionArn);
 
 		return response.ok(res);
 	} catch (err) {

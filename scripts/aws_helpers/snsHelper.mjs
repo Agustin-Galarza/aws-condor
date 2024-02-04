@@ -1,6 +1,3 @@
-/**
- * This is a copy of the sns.mjs file in resources/lambda_sources/lib
- */
 import { SNSClient } from '@aws-sdk/client-sns';
 import {
 	CreateTopicCommand,
@@ -44,12 +41,13 @@ export const deleteTopic = async topicArn => {
 	}
 };
 
-export const publish = async (topicArn, message) => {
+export const publish = async (topicArn, subject, message) => {
 	try {
 		const data = await snsClient.send(
 			new PublishCommand({
 				TopicArn: topicArn,
 				Message: message,
+				Subject: subject,
 			})
 		);
 		console.log('Message sent');

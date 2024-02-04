@@ -1,4 +1,4 @@
-exports.ok = body => ({
+export const ok = body => ({
 	statusCode: 200,
 	isBase64Encoded: false,
 	headers: {
@@ -10,7 +10,7 @@ exports.ok = body => ({
 	body: JSON.stringify(body),
 });
 
-exports.notFound = message => ({
+export const notFound = message => ({
 	statusCode: 404,
 	isBase64Encoded: false,
 	headers: {
@@ -22,7 +22,7 @@ exports.notFound = message => ({
 	body: JSON.stringify({ message }),
 });
 
-exports.badRequest = message => ({
+export const badRequest = message => ({
 	statusCode: 400,
 	isBase64Encoded: false,
 	headers: {
@@ -34,7 +34,7 @@ exports.badRequest = message => ({
 	body: JSON.stringify({ message }),
 });
 
-exports.serverError = message => ({
+export const serverError = message => ({
 	statusCode: 500,
 	isBase64Encoded: false,
 	headers: {
@@ -46,19 +46,19 @@ exports.serverError = message => ({
 	body: JSON.stringify({ message }),
 });
 
-exports.userDto = userObj => {
+export const userDto = userObj => {
 	if (userObj === null) {
 		return null;
 	}
 
 	return {
-		username: userObj.username,
+		id: btoa(userObj.email),
 		email: userObj.email,
 		group: userObj.group,
 	};
 };
 
-exports.groupDto = groupObj => {
+export const groupDto = groupObj => {
 	if (groupObj === null) {
 		return null;
 	}
@@ -69,9 +69,9 @@ exports.groupDto = groupObj => {
 	};
 };
 
-exports.reportDto = reportObj => reportObj;
+export const reportDto = reportObj => reportObj;
 
-exports.collectionDto = (collection, dto) => {
+export const collectionDto = (collection, dto) => {
 	if (collection === null) {
 		return null;
 	}
@@ -83,5 +83,6 @@ exports.collectionDto = (collection, dto) => {
 	return {
 		count: collection.count,
 		data: collection.data.map(dto),
+		paginationKey: collection.paginationKey,
 	};
 };

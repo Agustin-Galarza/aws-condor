@@ -23,17 +23,15 @@ variable "account_id" {
   description = "Account id"
 }
 
-variable "methods" {
+variable "lambdas" {
   description = "The methods of the API Gateway"
   type = list(object({
-    path = string
-    methods = list(object({
+      path = string
       http_method   = string
       handler       = string
       zip_name      = string
       env_variables = map(any)
       name          = string
-    }))
   }))
 }
 

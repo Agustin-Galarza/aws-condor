@@ -42,7 +42,7 @@ export const listBuckets = async () => {
 	return res.Buckets.map(b => b.Name);
 };
 
-export const uploadFile = async (filedata, objKey) => {
+export const putObject = async (filedata, objKey) => {
 	const res = await client.send(
 		new PutObjectCommand({
 			Bucket: BUCKET,
@@ -58,7 +58,12 @@ export const uploadFile = async (filedata, objKey) => {
 	return true;
 };
 
-export const downloadFile = async objKey => {
+/**
+ *
+ * @param {string} objKey
+ * @returns {StreamingBlobPayloadOutputTypes}
+ */
+export const getObject = async objKey => {
 	const res = await client.send(
 		new GetObjectCommand({
 			Bucket: BUCKET,
@@ -74,6 +79,22 @@ export const downloadFile = async objKey => {
 		return null;
 	}
 	return res.Body;
+};
+
+/**
+ * Converts an S3 object to a base64 string stream
+ * @param {StreamingBlobPayloadOutputTypes} objBody
+ * @returns {Promise<string>}
+ */
+export const getStreamResponse = async objBody => {
+	return (
+		await new Promise((resolve, reject) => {
+			const chunks = [];
+			objBody.on('data', chunk => chunks.push(chunk));
+			objBody.on('end', () => resolve(Buffer.concat(chunks)));
+			objBody.on('error', reject);
+		})
+	).toString('base64');
 };
 
 export const objectExists = async objKey => {

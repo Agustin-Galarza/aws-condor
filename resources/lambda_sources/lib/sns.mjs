@@ -41,16 +41,13 @@ export const deleteTopic = async topicArn => {
 	}
 };
 
-export const publish = async (topicArn, message, imageUrl = null) => {
-	let emailMessage = message;
-	if (imageUrl) {
-		emailMessage += `\n\n${imageUrl}`;
-	}
+export const publish = async (topicArn, subject, message) => {
 	try {
 		const data = await snsClient.send(
 			new PublishCommand({
 				TopicArn: topicArn,
-				Message: emailMessage,
+				Message: message,
+				Subject: subject,
 			})
 		);
 		console.log('Message sent');

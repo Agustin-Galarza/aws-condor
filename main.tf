@@ -118,7 +118,108 @@ module "api_gateway" {
   role_arn   = data.aws_iam_role.lab_role.arn
   account_id = data.aws_caller_identity.current.account_id
 
-  methods = []
+  lambdas = [
+    {
+      name          = "users_get"
+      http_method   = "GET"
+      path          = "users"
+      handler       = "main.handler"
+      zip_name      = "users_get"
+      env_variables = {}
+    },
+    {
+      name          = "users_post"
+      http_method   = "POST"
+      path          = "users"
+      handler       = "main.handler"
+      zip_name      = "users_post"
+      env_variables = {}
+    },
+    {
+      name          = "users_id_get"
+      http_method   = "GET"
+      path          = "users/{id}"
+      handler       = "main.handler"
+      zip_name      = "users_id_get"
+      env_variables = {}
+    },
+    {
+      name          = "groups_get"
+      http_method   = "GET"
+      path          = "groups"
+      handler       = "main.handler"
+      zip_name      = "groups_get"
+      env_variables = {}
+    },
+    {
+      name          = "groups_post"
+      http_method   = "POST"
+      path          = "groups"
+      handler       = "main.handler"
+      zip_name      = "groups_post"
+      env_variables = {}
+    },
+    {
+      name          = "groups_groupname_get"
+      http_method   = "GET"
+      path          = "groups/{groupname}"
+      handler       = "main.handler"
+      zip_name      = "groups_groupname_get"
+      env_variables = {}
+    },
+    {
+      name          = "groups_groupname_addmember"
+      http_method   = "POST"
+      path          = "groups/{groupname}/addMember"
+      handler       = "main.handler"
+      zip_name      = "groups_groupname_addmember"
+      env_variables = {}
+    },
+    //////
+    {
+      name          = "groups_groupname_reports_get"
+      http_method   = "GET"
+      path          = "groups/{groupname}/reports"
+      handler       = "main.handler"
+      zip_name      = "groups_groupname_reports_get"
+      env_variables = {}
+    },
+    {
+      name          = "reports_get"
+      http_method   = "GET"
+      path          = "reports"
+      handler       = "main.handler"
+      zip_name      = "reports_get"
+      env_variables = {}
+    },
+    {
+      name          = "reports_post"
+      http_method   = "POST"
+      path          = "reports"
+      handler       = "main.handler"
+      zip_name      = "reports_post"
+      env_variables = {
+        # "CLOUDFRONT_DOMAIN_NAME" = module.cloudfront.cloudfront_domain_name
+      }
+    },
+    {
+      name          = "reports_id_get"
+      http_method   = "GET"
+      path          = "reports/{reportId}"
+      handler       = "main.handler"
+      zip_name      = "reports_id_get"
+      env_variables = {}
+    },
+    {
+      name          = "images_id_get"
+      http_method   = "GET"
+      path          = "images/{id}"
+      handler       = "main.handler"
+      zip_name      = "images_id_get"
+      env_variables = {}
+    },
+  ]
+
 
   layers_arns = [
     aws_lambda_layer_version.dynamo_layer.arn,

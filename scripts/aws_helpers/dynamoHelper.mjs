@@ -199,7 +199,6 @@ export const createUser = async (email, subscriptionArn = null) => {
 			},
 		})
 	);
-	console.log('User PutItem response:', res);
 	const code = getStatusCode(res);
 	if (code !== 200 && code !== 201) {
 		console.error('Error. User could not be created', res);
@@ -255,7 +254,6 @@ export const updateUser = async (email, { group, subscriptionArn }) => {
 			ExpressionAttributeValues: expressionAttributeValues,
 		})
 	);
-	console.log('UpdateItem response:', res);
 	const code = getStatusCode(res);
 	if (code !== 200) {
 		return { success: false, message: 'Error. User could not be updated' };
@@ -356,10 +354,9 @@ export const createGroup = async (groupName, topicArn) => {
 				},
 			})
 		);
-		console.log('Group PutItem response:', res);
 		const code = getStatusCode(res);
 		if (code !== 200 && code !== 201) {
-			return { code, message: 'Error. Group could not be created.' };
+			return { success: false, message: 'Error. Group could not be created.' };
 		}
 		return { success: true, message: null };
 	} catch (err) {
@@ -425,16 +422,15 @@ export const addMember = async (groupname, email, subscriptionArn) => {
 					[PK]: strToDynamo(groupPK(groupname)),
 					[SK]: strToDynamo(groupSK(groupname)),
 				},
-				UpdateExpression: 'SET #m = list_append(#m, :username)',
+				UpdateExpression: 'SET #m = list_append(#m, :email)',
 				ExpressionAttributeNames: {
 					'#m': 'members',
 				},
 				ExpressionAttributeValues: {
-					':username': strListToDynamo([email]),
+					':email': strListToDynamo([email]),
 				},
 			})
 		);
-		console.log('group UpdateItem response:', res);
 		const groupCode = getStatusCode(res);
 		if (groupCode !== 200) {
 			console.warn('Error adding user to group', res);
@@ -462,7 +458,6 @@ export const addMember = async (groupname, email, subscriptionArn) => {
 				},
 			})
 		);
-		console.log('user UpdateItem response:', userRes);
 		const userCode = getStatusCode(userRes);
 		if (userCode !== 200) {
 			return {
@@ -673,7 +668,6 @@ export const createReport = async (user, { message, imageId }) => {
 				},
 			})
 		);
-		console.log('Report PutItem response:', res);
 		const code = getStatusCode(res);
 		if (code !== 200 && code !== 201) {
 			console.warn('Error creating report', res);
@@ -868,7 +862,6 @@ export const createImage = async (
 				},
 			})
 		);
-		console.log('Image PutItem response:', res);
 		const code = getStatusCode(res);
 		if (code !== 200 && code !== 201) {
 			console.error('Error uploading image', res);
