@@ -6,7 +6,5 @@ const poolData = {
   ClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
 } satisfies ICognitoUserPoolData;
 
-console.log(poolData);
-
 const UserPool = new CognitoUserPool(poolData);
 export default UserPool;

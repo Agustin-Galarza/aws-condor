@@ -6,9 +6,9 @@ import Label from "../components/Label.js";
 import userStore from "../store/userStore.js";
 import { Button } from "@/components/ui/button.js";
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [email, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setToken } = userStore();
+  const { setToken, setEmail } = userStore();
 
   const [error, setError] = useState("");
 
@@ -30,6 +30,7 @@ const Login = () => {
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         setToken(data.getIdToken().getJwtToken());
+        setEmail(email);
         navigate("/");
       },
       onFailure: (err) => {
@@ -54,7 +55,7 @@ const Login = () => {
       <Form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
         <Label
           value={email}
-          onChange={setEmail}
+          onChange={setUserEmail}
           id="email"
           type="text"
           label="Email"

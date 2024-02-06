@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button.js";
 function Layout() {
   const navigate = useNavigate();
 
-  const { token, cleanToken } = userStore();
+  const { token, cleanToken, cleanEmail, email } = userStore();
 
   return (
     <main className="dark bg-background min-h-screen flex flex-col justify-between items-center">
@@ -20,17 +20,24 @@ function Layout() {
               Condor
             </span>
           </button>
+
           {token ? (
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => {
-                cleanToken();
-                navigate("/login");
-              }}
-            >
-              Logout
-            </Button>
+            <>
+              <span className="text-primary text-sm sm:block hidden">
+                {email}
+              </span>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => {
+                  cleanToken();
+                  cleanEmail();
+                  navigate("/login");
+                }}
+              >
+                Logout
+              </Button>
+            </>
           ) : (
             <div className="flex gap-2 items-center">
               <Button size="lg" onClick={() => navigate("login")}>

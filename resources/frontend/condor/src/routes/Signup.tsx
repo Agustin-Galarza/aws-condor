@@ -103,7 +103,7 @@ const Signup = () => {
             label="Confirmation code"
           />
           <Button type="submit">Submit</Button>
-          <Button onClick={() => handleResendConfirmation} variant="outline">
+          <Button onClick={() => handleResendConfirmation()} variant="outline">
             Resend code
           </Button>
         </Form>

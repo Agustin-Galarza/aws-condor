@@ -14,8 +14,10 @@ import {
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,7 +35,7 @@ function ReportDrawer() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>Create report</Button>
+          <Button className="sm:w-auto w-full">Create report</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -42,7 +44,12 @@ function ReportDrawer() {
               Pick a photo or video from your gallery and upload it here.
             </DialogDescription>
           </DialogHeader>
-          <ReportForm />
+          <ReportForm onFinish={() => setOpen(false)} />
+          <DialogFooter className="pt-2">
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     );
@@ -51,16 +58,16 @@ function ReportDrawer() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button className="sm:w-auto w-full">Create report</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerTitle>Create report</DrawerTitle>
           <DrawerDescription>
             Make changes to your profile here. Click save when you're done.
           </DrawerDescription>
         </DrawerHeader>
-        <ReportForm classname="px-4" />
+        <ReportForm classname="px-4" onFinish={() => setOpen(false)} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
