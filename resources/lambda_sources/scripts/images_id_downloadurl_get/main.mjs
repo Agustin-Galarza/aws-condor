@@ -5,7 +5,7 @@ import * as s3 from '/opt/nodejs/s3.mjs';
 
 /**
  * GET Request:
- * - Path: /images/{id}
+ * - Path: /images/{id}/donwloadurl
  * - PathParameters: {
  * 		id: string,
  * }
@@ -24,19 +24,18 @@ export const handler = async (event, context) => {
 	}
 
 	const expirationSecs = 3600;
-	const imageBody = await s3.getObject(imageId);
-	if (imageBody === null) {
-		return response.serverError('Error getting image');
+	const imageUrl = await s3.createDownloadPresignedUrl(imageId, expirationSecs);
+	if (imageUrl === null) {
+		return response.serverError('Error generating image url');
 	}
-	const streamedBody = await s3.getStreamResponse(imageBody);
 
 	return {
 		statusCode: 200,
 		headers: {
-			'Content-Type': imageRecord.mimeType ?? 'image/*',
+			'Content-Type': 'text/plain',
 			'Access-Control-Allow-Origin': '*',
 		},
-		body: streamedBody,
-		isBase64Encoded: true,
+		body: imageUrl,
+		isBase64Encoded: false,
 	};
 };

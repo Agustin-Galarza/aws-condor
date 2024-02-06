@@ -218,6 +218,14 @@ module "api_gateway" {
       zip_name      = "images_id_get"
       env_variables = {}
     },
+    {
+      name          = "images_id_downloadurl_get"
+      http_method   = "GET"
+      path          = "images/{id}/downloadurl"
+      handler       = "main.handler"
+      zip_name      = "images_id_downloadurl_get"
+      env_variables = {}
+    },
   ]
 
 

@@ -736,7 +736,7 @@ export const getReports = async (
 	sentAt = null,
 	paginationKey = undefined
 ) => {
-	const keyExpression = `#t = :type`;
+	let keyExpression = `#t = :type`;
 	const expressionAttributeNames = {
 		'#t': TYPE,
 	};
