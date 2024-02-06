@@ -1,10 +1,12 @@
 ### Remember
 
 Run `zip_lambdas.sh` to zip the lambdas before running `terraform apply`.
+After running, the script bootstrap.mjs will help you to add images and topics to the sns, dynamo and s3
+Finally, remember to add the CLOUDFRONT_URL to the reports post lambda environment variables
 
 # aws-condor
 
-The best neighborhood overwatch application. 
+The best neighborhood overwatch application.
 
 ## Arquitectura actualizada del con las consideraciones de la catedra
 
@@ -18,28 +20,27 @@ https://aws.amazon.com/blogs/compute/patterns-for-building-an-api-to-upload-file
 1. api_gateway: Configuración y gestión del AWS API Gateway.
 2. api_gateway_endpoint: Automatiza la creación de todos los endpoints necesarios en base a la definición de la api provista.
 3. cognito: Gestiona la configuración de AWS Cognito, que es un servicio de autenticación.
-3. frontend: Se encarga de la configuración relacionada con el frontend.
-4. lambda: Gestiona las funciones Lambda de AWS.
-5. dynamo: Crea una tabla de dynamo con hash y scan key.
-5. logging: Configura y gestiona los registros y monitorización.
-6. security_group: Facilita la creación de un security group con sus recursos de ingress y egress rules.
-7. vpc, vpc_endpoint (externo): Configura la VPC y sus recursos asociados, además de agregar los vpc endpoint para la comunicación entre servicios.
-8. sns (externo): Gestiona la creación de un tópico en SNS
-
+4. frontend: Se encarga de la configuración relacionada con el frontend.
+5. lambda: Gestiona las funciones Lambda de AWS.
+6. dynamo: Crea una tabla de dynamo con hash y scan key.
+7. logging: Configura y gestiona los registros y monitorización.
+8. security_group: Facilita la creación de un security group con sus recursos de ingress y egress rules.
+9. vpc, vpc_endpoint (externo): Configura la VPC y sus recursos asociados, además de agregar los vpc endpoint para la comunicación entre servicios.
+10. sns (externo): Gestiona la creación de un tópico en SNS
 
 ## Lista de componentes a evaluar
 
 1. Lambda
-2. VPC 
+2. VPC
 3. API Gateway
 4. S3
 5. Cognito
 6. DynamoDB
 
-
-## Funciones y meta-argumentos utilizados 
+## Funciones y meta-argumentos utilizados
 
 ### Funciones
+
 1. flatten
    - Se usa para transformar la definición de endpoints de la api, aplanando los métodos http e insertándoles su endpoint correspondiente.
 2. filebase64sha256
@@ -50,14 +51,16 @@ https://aws.amazon.com/blogs/compute/patterns-for-building-an-api-to-upload-file
    - Para dividir el cidr de la vpc entre las subnets
 
 ### Meta-argumentos
+
 1. for_each
    - Utilizada en varios módulos para generar recursos en base a definiciones más simples y entendibles. Un ejemplo es definir la api como una lista de endpoints, que transformamos a mapas para generar todos los recursos necesarios.
 2. count
-    - Para generar los recursos de ingress y egress rules de los security groups.
+   - Para generar los recursos de ingress y egress rules de los security groups.
 3. depends_on
-   - Para resolver dependencias entre recursos, un ejemplo es el caso del deploy del api gateway, el cuál depende de la creación de los endpoints 
+   - Para resolver dependencias entre recursos, un ejemplo es el caso del deploy del api gateway, el cuál depende de la creación de los endpoints
 
 ## Diagrama de arquitectura implemenatada
+
 <img src="Arquitectura Cloud - Cóndor.png" alt="arquitectura implementada aws" width="800"/>
 
 ## Rúbrica
